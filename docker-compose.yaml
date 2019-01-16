@@ -1,0 +1,14 @@
+version: '3.2'
+
+services:
+  db:
+    hostname: node_postgres
+    container_name: node_postgres
+    image: 'postgres:9.6.5'
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=node
+      - POSTGRES_DB=node
+      - POSTGRES_PASSWORD=node
