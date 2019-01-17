@@ -7,15 +7,17 @@ module.exports = {
       generated: "uuid",
     },
     firstName: {
+      name: 'firstname',
       type: "varchar"
     },
     lastName: {
+      name: 'lastname',
       type: "varchar"
     },
-    password: {
+    pass: {
       type: "varchar"
     },
-    email: {
+    name: {
       type: "varchar"
     }
   }

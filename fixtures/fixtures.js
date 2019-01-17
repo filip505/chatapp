@@ -13,14 +13,12 @@ module.exports = {
 
   async createUser(connection){
     const person = connection.getRepository('person')
-    console.log('1')
-    // await person.save({
-    //   id: uuid(),
-    //   firstName: 'test',
-    //   lastName: 'test',
-    //   email: 'test',
-    //   password: 'test'
-    // })
-    console.log('2')
+    await person.save({
+      id: uuid(),
+      firstName: 'test',
+      lastName: 'test',
+      name: 'test',
+      pass: 'test'
+    })
   }
 }

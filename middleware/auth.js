@@ -6,7 +6,6 @@ module.exports = function (req, res, next) {
     if (token === '123') {
       req.user = { name: 'Filip', auth: 'Admin' }
     }
-    next();
   }
-  res.status(HttpStatus.UNAUTHORIZED).send();
+  next();
 }
