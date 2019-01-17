@@ -1,6 +1,4 @@
-
 const axios = require('axios')
-
 describe('sign in user', () => {
   let close
 

@@ -48,7 +48,9 @@ module.exports = new Promise(async function (resolve, reject) {
   })
   app = require('http').createServer(app)
   await app.listen(5001)
+  console.log('___________________________')
   console.log('server started at port 5001')
+  console.log('server env '+process.env.NODE_ENV)
   // send back closing function
   resolve(async () => {
     await app.close();
