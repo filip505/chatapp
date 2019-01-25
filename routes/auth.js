@@ -10,11 +10,15 @@ module.exports = function (app) {
   app.post('/login', (req, res) => {
 
   })
-  app.post('/singin',
+  app.post('/signin',
     validate(signUpSchema),
     async (req, res, next) => {
       req.body.id = uuid()
+      console.log('body', req.body)
       const user = await personRepository.save(req.body)
       res.status(http.CREATED).send(user)
     })
+  app.get('/ping', (req, res) =>{
+    res.send('pong')
+  })
 }

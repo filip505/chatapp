@@ -1,11 +1,13 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const auth = require('./middleware/auth')
-const fixtures = require('./fixtures/fixtures')
 const User = require('./models/User')
 const Test = require('./models/Token')
 const typeorm = require("typeorm");
 const { createConnection } = require('typeorm')
+// const util = require('util')
+//connection.query = util.promisify(connection.query)
+
 const EntitySchema = typeorm.EntitySchema;
 const config = {
   type: "postgres",
@@ -28,32 +30,36 @@ const config = {
 
 module.exports = new Promise(async function (resolve, reject) {
   const connection = await createConnection(config)
-  // if (process.env.NODE_ENV === 'dev') {
-  //   await connection.runMigrations()
-  //   config.entities.forEach(async (item) => {
-  //     await connection.query('delete from ' + item.options.name)
-  //   })
-  //   fixtures.init(connection)
-  // }
-  // else {
-  //   connection.runMigrations()
-  // }
+  const fixtures = require('fixtures')(connection)
+  if (process.env.NODE_ENV === 'dev') {
+    await connection.runMigrations()
+    for (let i = 0; i < config.entities.length; i++) {
+      const item = config.entities[i].options.name
+      await connection.query('delete from ' + item)
+    }
+    await fixtures.init()
+  }
+  else {
+    //await connection.runMigrations()
+  }
+
   let app = express()
   app.use(bodyParser.json())
   app.use(auth)
   require('./routes/user')(app)
   require('./routes/auth')(app)
-  app.get('/ping', (req, res) => {
-    res.send('pong')
-  })
+
   app = require('http').createServer(app)
   await app.listen(5001)
+
   console.log('___________________________')
   console.log('server started at port 5001')
-  console.log('server env '+process.env.NODE_ENV)
+  console.log('server env ' + process.env.NODE_ENV)
+
   // send back closing function
-  resolve(async () => {
-    await app.close();
-    await connection.close()
+  resolve({
+    app,
+    connection,
+    fixtures
   })
 })

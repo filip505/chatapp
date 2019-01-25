@@ -2,7 +2,7 @@ const axios = require('axios')
 let close
 
 beforeAll((done) => {
-  require('./../server').then(clean => {
+  require('../server').then(clean => {
     close = clean
     done();
   })

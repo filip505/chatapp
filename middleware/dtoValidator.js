@@ -6,6 +6,9 @@ module.exports = function (schema) {
       console.log('invalid request')
       res.status(404).send(tv1.error);
     }
-    next()
+    else {
+       next()
+    }
+   
   }
 }

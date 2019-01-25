@@ -1,23 +1,40 @@
 const axios = require('axios')
+
 describe('sign in user', () => {
-  let close
+  let app, connection, fixtures
 
   beforeAll((done) => {
     require('../../../server').then(clean => {
-      close = clean
+      app = clean.app
+      connection = clean.connection
+      fixtures = clean.fixtures
       done();
     })
   })
 
-  it('sing in user success', async (done) => {
+  it('sing in user 200', async (done) => {
     const request = { email: 'test@test.com', password: 'test' }
-    axios.get('http://localhost:5001/singin', request).catch(({response}) => {
-      expect(response.status).toEqual(404)
+    axios.post('http://localhost:5001/signin', request).then((response) => {
+      //const body = JSON.parse('response.body')
+      console.log('typeof', response.data.email)
+      expect(response.status).toEqual(201)
+      expect(response.data.email).toEqual(request.email)
+      expect(response.data.password).toEqual(request.password)
+      done()
+    })
+  })
+
+  it('sing in user 404', async (done) => {
+    const request = { email: 'test@test.com' }
+    axios.post('http://localhost:5001/signin', request).catch(({ response }) => {
+      console.log('error is here', response.data.message)
+      expect(response.data.message).toEqual('Missing required property: password')
       done()
     })
   })
 
   afterAll(() => {
-    close()
+    connection.close()
+    app.close()
   })
 })
