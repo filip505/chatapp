@@ -1,1 +1,1 @@
-require('./server').then()
+require('index').then()

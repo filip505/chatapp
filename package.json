@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_PATH=./ NODE_ENV=dev node index",
-    "test": "NODE_PATH=./ NODE_ENV=test jest"
+    "start": "NODE_PATH=./src NODE_ENV=dev node index",
+    "test": "NODE_PATH=./src NODE_ENV=test jest",
+    "migrate":  "ts-node ./node_modules/typeorm/cli.js migrations:run"
   },
   "author": "",
   "license": "ISC",

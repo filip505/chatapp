@@ -4,7 +4,7 @@ describe('sign in user', () => {
   let app, connection, fixtures
 
   beforeAll((done) => {
-    require('../../../server').then(clean => {
+    require('index').then(clean => {
       app = clean.app
       connection = clean.connection
       fixtures = clean.fixtures
@@ -27,7 +27,6 @@ describe('sign in user', () => {
   it('sing in user 404', async (done) => {
     const request = { email: 'test@test.com' }
     axios.post('http://localhost:5001/signin', request).catch(({ response }) => {
-      console.log('error is here', response.data.message)
       expect(response.data.message).toEqual('Missing required property: password')
       done()
     })
