@@ -4,7 +4,7 @@ const typeorm = require("typeorm")
 const connection = typeorm.getConnection()
 const personRepository = connection.getRepository('person')
 
-module.exports = function (app) {
+export default function (app) {
 
   app.get(prefix, async (req, res) => {
     const users = await personRepository.find();

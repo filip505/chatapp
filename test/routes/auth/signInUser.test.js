@@ -1,10 +1,11 @@
-const axios = require('axios')
+import axios from 'axios'
+import server from './../../../src'
 
 describe('sign in user', () => {
   let app, connection, fixtures
 
   beforeAll((done) => {
-    require('index').then(clean => {
+    server.then(clean => {
       app = clean.app
       connection = clean.connection
       fixtures = clean.fixtures

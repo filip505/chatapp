@@ -1,6 +1,6 @@
-const uuid = require('uuid/v1')
+import v1 from 'uuid';
 
-module.exports = function (connection) {
+export default function (connection) {
   return {
     init: async function () {
       await this.createUser()
@@ -12,7 +12,7 @@ module.exports = function (connection) {
       pass = 'test'
     ) {
       await connection.getRepository('person').save({
-        id: uuid(),
+        id: v1(),
         firstName,
         lastName,
         name,
