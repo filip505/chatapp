@@ -8,6 +8,7 @@ import authMiddleware from './middleware/auth'
 import { User, Token } from './models'
 import Fixtures from './fixtures'
 import { auth } from './routes'
+import cors from 'cors'
 
 const config = {
   type: "postgres",
@@ -33,7 +34,7 @@ export const server = new Promise(async function (resolve, reject) {
   const fixtures = new Fixtures(connection)
   if (process.env.NODE_ENV === 'dev') {
     await connection.runMigrations()
-    for (let i = 0; i < config.entities.length; i++) {
+    for (let i = 0; i < config.entities.lenrgth; i++) {
       const item = config.entities[i].options.name
       await connection.query('delete from ' + item)
     }
@@ -44,9 +45,14 @@ export const server = new Promise(async function (resolve, reject) {
   }
 
   let app = express()
+
+  app.use(cors())
   app.use(bodyParser.json())
   app.use(authMiddleware)
   auth(app)
+  app.get('/ping', (req, res) => {
+    res.send('pong')
+  })
   //user(app)
 
   app = http.createServer(app)

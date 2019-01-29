@@ -16,8 +16,6 @@ describe('sign in user', () => {
   it('sing in user 200', async (done) => {
     const request = { email: 'test@test.com', password: 'test' }
     axios.post('http://localhost:5001/signin', request).then((response) => {
-      //const body = JSON.parse('response.body')
-      console.log('typeof', response.data.email)
       expect(response.status).toEqual(201)
       expect(response.data.email).toEqual(request.email)
       expect(response.data.password).toEqual(request.password)
