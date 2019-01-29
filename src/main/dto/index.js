@@ -1,3 +1,3 @@
-import SignInSchema from './SignInSchema'
-
-export { SignInSchema }
+import signInSchema from './signInSchema'
+import loginSchema from './loginSchema'
+export { signInSchema, loginSchema }
