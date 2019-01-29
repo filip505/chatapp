@@ -1,11 +1,12 @@
+
+import '@babel/polyfill'
 import express from 'express'
 import bodyParser from 'body-parser'
 import http from 'http'
 import { EntitySchema, createConnection } from 'typeorm'
-
 import authMiddleware from './middleware/auth'
 import { User, Token } from './models'
-import fixtures from './fixtures'
+import Fixtures from './fixtures'
 import { auth } from './routes'
 
 const config = {
@@ -29,18 +30,18 @@ const config = {
 
 export const server = new Promise(async function (resolve, reject) {
   const connection = await createConnection(config)
-  // const fixtures = require('fixtures')(connection)
-  // if (process.env.NODE_ENV === 'dev') {
-  //   await connection.runMigrations()
-  //   for (let i = 0; i < config.entities.length; i++) {
-  //     const item = config.entities[i].options.name
-  //     await connection.query('delete from ' + item)
-  //   }
-  //   await fixtures.init()
-  // }
-  // else {
-  //   await connection.runMigrations()
-  // }
+  const fixtures = new Fixtures(connection)
+  if (process.env.NODE_ENV === 'dev') {
+    await connection.runMigrations()
+    for (let i = 0; i < config.entities.length; i++) {
+      const item = config.entities[i].options.name
+      await connection.query('delete from ' + item)
+    }
+    await fixtures.init()
+  }
+  else {
+    await connection.runMigrations()
+  }
 
   let app = express()
   app.use(bodyParser.json())

@@ -1,6 +1,3 @@
-
-
-//require('babel-polyfill')
 import { server } from './../../../src'
 import axios from 'axios'
 
