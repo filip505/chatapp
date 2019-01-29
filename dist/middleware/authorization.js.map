@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/middleware/authorization.js"],"names":["exports","module"],"mappings":";;AAAAA,QAAQC,MAAR,GAAiB,EAAjB","file":"authorization.js","sourcesContent":["exports.module = {}"]}

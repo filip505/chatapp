@@ -1,14 +1,13 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import typeorm from 'typeorm'
 import http from 'http'
+import { EntitySchema, createConnection } from 'typeorm'
 
 import authMiddleware from './middleware/auth'
 import { User, Token } from './models'
 import fixtures from './fixtures'
 import { auth } from './routes'
 
-const EntitySchema = typeorm.EntitySchema;
 const config = {
   type: "postgres",
   host: "localhost",
@@ -28,8 +27,8 @@ const config = {
   ]
 }
 
-export default new Promise(async function (resolve, reject) {
-  const connection = await typeorm.createConnection(config)
+export const server = new Promise(async function (resolve, reject) {
+  const connection = await createConnection(config)
   // const fixtures = require('fixtures')(connection)
   // if (process.env.NODE_ENV === 'dev') {
   //   await connection.runMigrations()

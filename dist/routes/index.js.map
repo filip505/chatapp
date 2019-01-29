@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/routes/index.js"],"names":["auth"],"mappings":";;;;;;;AAAA;;;;;;AACA;;QAESA,I,GAAAA,c","file":"index.js","sourcesContent":["import auth from './auth'\n//import user from './user'\n\nexport { auth }\n\n"]}

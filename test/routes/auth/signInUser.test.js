@@ -1,5 +1,8 @@
+
+
+//require('babel-polyfill')
+import { server } from './../../../src'
 import axios from 'axios'
-import server from './../../../src'
 
 describe('sign in user', () => {
   let app, connection, fixtures
@@ -31,6 +34,7 @@ describe('sign in user', () => {
       expect(response.data.message).toEqual('Missing required property: password')
       done()
     })
+    done()
   })
 
   afterAll(() => {

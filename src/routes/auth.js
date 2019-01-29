@@ -7,7 +7,7 @@
 // const signUpSchema = require('../dto/signInSchema')
 
 import v1 from 'uuid'
-import typeorm from 'typeorm'
+import { getConnection } from 'typeorm'
 import http from 'http-status-codes'
 import validate from '../middleware/dtoValidator'
 import { SignInSchema } from '../dto'
@@ -15,7 +15,7 @@ import { SignInSchema } from '../dto'
 
 
 export default function (app) {
-  const personRepository = typeorm.getConnection().getRepository('person')
+  const personRepository = getConnection().getRepository('person')
   
   app.post('/login', (req, res) => {
 
