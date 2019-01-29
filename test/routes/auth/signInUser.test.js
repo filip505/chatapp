@@ -1,16 +1,13 @@
 import { server } from './../../../src'
+import getContext from './../../testContext'
 import axios from 'axios'
+import { isRegExp } from 'util';
 
 describe('sign in user', () => {
-  let app, connection, fixtures
+  let context
 
-  beforeAll((done) => {
-    server.then(clean => {
-      app = clean.app
-      connection = clean.connection
-      fixtures = clean.fixtures
-      done();
-    })
+  beforeAll(async () => {
+    context = await getContext(true) 
   })
 
   it('sing in user 200', async (done) => {
@@ -32,8 +29,4 @@ describe('sign in user', () => {
     done()
   })
 
-  afterAll(() => {
-    connection.close()
-    app.close()
-  })
 })
