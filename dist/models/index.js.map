@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/models/index.js"],"names":["Token","User"],"mappings":";;;;;;;AAAA;;;;AACA;;;;;;QAESA,K,GAAAA,e;QAAOC,I,GAAAA,c","file":"index.js","sourcesContent":["import Token from './Token'\nimport User from './User'\n\nexport { Token, User }"]}
