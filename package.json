@@ -39,6 +39,6 @@
     ]
   },
   "jest": {
-    "setupFilesAfterEnv": ["./test/setup.js"]
+    "setupFilesAfterEnv": ["./src/test/setup.js"]
   }
 }

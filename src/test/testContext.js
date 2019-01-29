@@ -1,4 +1,4 @@
-import { server } from './../src'
+import { server } from './../main'
 
 class TestContext {
   async init() {

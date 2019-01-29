@@ -1,2 +1,2 @@
 require('@babel/register')
-require('../src').server.then()
+require('../src/main').server.then()

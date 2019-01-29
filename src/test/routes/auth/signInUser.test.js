@@ -1,4 +1,4 @@
-import { server } from './../../../src'
+import { server } from './../../../main'
 import getContext from './../../testContext'
 import axios from 'axios'
 import { isRegExp } from 'util';
