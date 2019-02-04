@@ -11,22 +11,19 @@ class TestContext {
 
 let context
 
+let count = 0
+
 const getContext = async (reuse) => {
-  if (reuse && context == undefined) {
+  console.log('tu sam opet', context)
+  if (context == undefined) {
+    console.log('tu sam opet', count)
+    count++
     context = new TestContext()
     await context.init()
-    return context
+  
   }
-  else if (reuse) {
-    return context
-  }
-  else {
-    context = new TestContext()
-    context.app.close()
-    context.connection.close()
-    await context.init()
-    return context
-  }
+ 
+  return context
 
 }
 

@@ -1,5 +1,5 @@
 import { server } from './../../../main'
-import getContext from './../../testContext'
+import getContext from '../../testContext'
 import axios from 'axios'
 import { isRegExp } from 'util';
 
@@ -7,7 +7,7 @@ describe('sign in user', () => {
   let context
 
   beforeAll(async () => {
-    context = await getContext(true) 
+    context = await getContext(false) 
   })
 
   it('sing in user 200', async (done) => {
@@ -18,6 +18,7 @@ describe('sign in user', () => {
       expect(response.data.password).toEqual(request.password)
       done()
     })
+    
   })
 
   it('sing in user 404', async (done) => {
@@ -26,7 +27,6 @@ describe('sign in user', () => {
       expect(response.data.message).toEqual('Missing required property: password')
       done()
     })
-    done()
   })
 
 })
