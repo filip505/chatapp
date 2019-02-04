@@ -1,5 +1,5 @@
 import v1 from 'uuid';
-
+import { getRepository } from 'typeorm'
 // export default function (connection) {
 //   return {
 //     init: async function () {
@@ -19,30 +19,43 @@ import v1 from 'uuid';
 //         pass
 //       })
 //     }
-//   }
+//   }–––
 
 // }
 
 export default class Fixtures {
-  constructor(connection) {
-    this.connection = connection
-  }
 
   async init() {
     await this.createUser()
   }
 
   async createUser(
+    tokens = [],
     firstName = 'test',
     lastName = 'test',
     name = 'test',
-    pass = 'test') {
-    await this.connection.getRepository('person').save({
-      id: v1(),
+    pass = 'test',
+    id = v1(),
+  ) {
+    tokens.forEach(el => el.personId = id)
+    return await getRepository('person').save({
+      id,
       firstName,
       lastName,
       name,
-      pass
+      pass,
+      tokens
     })
   }
+
+  async createToken(
+    user,
+    id = v1(),
+  ) {
+    return await getRepository('token').save({
+      id,
+      user
+    })
+  }
+
 }

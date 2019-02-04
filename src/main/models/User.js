@@ -17,8 +17,15 @@ export default {
     password: {
       type: "varchar"
     },
-    name: {
+    email: {
       type: "varchar"
+    }
+  },
+  relations: {
+    tokens: {
+      target: 'token',
+      type: 'one-to-many',
+      cascade: true
     }
   }
 };

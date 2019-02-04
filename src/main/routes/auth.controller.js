@@ -1,11 +1,12 @@
 import v1 from 'uuid'
-import { getConnection } from 'typeorm'
 import http from 'http-status-codes'
+import { getRepository } from 'typeorm'
 import validate from '../middleware/dtoValidator'
 import { signInSchema, loginSchema } from '../dto'
 
 export default function (app) {
-  const personRepository = getConnection().getRepository('person')
+  
+  const personRepository = getRepository('person')
 
   app.post('/login', validate(loginSchema),
     (req, res) => {

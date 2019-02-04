@@ -1,3 +1,4 @@
+import Person from './User'
 export default {
   name: "token",
   columns: {
@@ -6,8 +7,16 @@ export default {
       type: "uuid",
       generated: "uuid",
     },
+    personId: {
+      type: "uuid"
+    }
+  },
+  relations: {
     person: {
-      type: "uuid",
+      target: 'person',
+      type: 'many-to-one',
+      joinColumn: true,
+      cascade: true
     }
   }
 };
