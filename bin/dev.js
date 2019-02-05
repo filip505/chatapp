@@ -1,2 +1,3 @@
 require('@babel/register')
-require('../src/main').server.then()
+let { server } = require('../src/main')
+server(5001)

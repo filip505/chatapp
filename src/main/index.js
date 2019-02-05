@@ -30,14 +30,14 @@ const config = {
   ]
 }
 
-export const server = new Promise(async function (resolve, reject) {
+export const server = async (port) => {
   const connection = await createConnection(config)
   const fixtures = new Fixtures(connection)
   await connection.runMigrations()
   console.log('is clean', config.entities.length)
   if (process.env.NODE_ENV === 'test') {
-    
-    
+
+
   }
 
   let app = express()
@@ -46,6 +46,7 @@ export const server = new Promise(async function (resolve, reject) {
   app.use(bodyParser.json())
   app.use(authMiddleware)
   authController(app)
+
   app.get('/ping', (req, res) => {
     res.send('pong')
   })
@@ -63,20 +64,16 @@ export const server = new Promise(async function (resolve, reject) {
   // const users = await getRepository('person').delete({id: '97fe1c29-2eef-4d78-b53e-49664c8d70dd'})
   // console.log('users', users)
   app = http.createServer(app)
-  app = app.listen(5001)
-  app.close()
-  
-  
 
-  console.log('___________________________')
-  console.log('server started at port 5001')
-  console.log('server env ' + process.env.NODE_ENV)
-  console.log('database name ' + config.database)
-  // send back closing function
-  
-  resolve({
-    app,
-    connection,
-    fixtures
+  app.closeAll = () => {
+    connection.close()
+    app.close()
+  }
+
+  return app.listen(port, () => {
+    console.log('___________________________')
+    console.log('server started at port' + port)
+    console.log('server env ' + process.env.NODE_ENV)
+    console.log('database name ' + config.database)
   })
-})
+}

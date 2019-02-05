@@ -13,7 +13,6 @@ export default function (app) {
     async (req, res) => {
       const { password, email } = req.body
       const user = await personRepository.findOne({ email, password })
-      console.log('tugledaj', { email, password })
       if (user) {
         const token = await tokenRepository.save({ id: v1(), personId: user.id })
         res.send({ user, token })
@@ -26,9 +25,7 @@ export default function (app) {
   app.post('/signin',
     validate(signInSchema),
     async (req, res) => {
-      console.log('bok2 bok2')
       req.body.id = v1()
-      console.log('body', req.body)
       const user = await personRepository.save(req.body)
       res.status(http.CREATED).send(user)
     })

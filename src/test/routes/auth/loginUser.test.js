@@ -1,15 +1,21 @@
-import getContext from '../../testContext'
+import { server } from './../../../main'
+import Fixtures from './../../../main/fixtures'
 import axios from 'axios'
 
 describe('login user', () => {
-  let context
+
+  let app, fixtures
 
   beforeAll(async () => {
-    context = await getContext(false)
+    app = await server(5001)
   })
-  
+
+  afterAll(() => {
+    app.closeAll()
+  })
+
   it('login user 200', async (done) => {
-    const fixtures = context.fixtures
+    fixtures = new Fixtures()
     const user = await fixtures.createUser('test@test.com', 'test')
     const token = await fixtures.createToken(user)
     const request = { email: 'test@test.com', password: 'test' }

@@ -1,13 +1,16 @@
 import { server } from './../../../main'
-import getContext from '../../testContext'
 import axios from 'axios'
-import { isRegExp } from 'util';
 
 describe('sign in user', () => {
-  let context
+
+  let app, fixtures
 
   beforeAll(async () => {
-    context = await getContext(false) 
+    app = await server(5001)
+  })
+
+  afterAll(() => {
+    app.closeAll()
   })
 
   it('sing in user 200', async (done) => {
@@ -18,7 +21,7 @@ describe('sign in user', () => {
       expect(response.data.password).toEqual(request.password)
       done()
     })
-    
+
   })
 
   it('sing in user 404', async (done) => {
