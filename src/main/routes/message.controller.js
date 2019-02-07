@@ -5,7 +5,7 @@ import { oauthMiddleware } from './../middleware'
 import { dtoValidatorMiddleware as validate } from '../middleware'
 import { signInSchema, loginSchema } from '../dto'
 
-export default function (app) {
+export default function (app, sendMessage) {
 
   const messageRepository = getRepository('message')
 
@@ -13,6 +13,7 @@ export default function (app) {
     async (req, res) => {
       const store = { ...req.body, id: v1(), senderId: req.user.id }
       await messageRepository.save(store)
+      sendMessage(store)
       res.send(store)
     })
 }

@@ -49,7 +49,7 @@ export const server = async (port) => {
   app.use(cors())
   app.use(bodyParser.json())
   app.use(authMiddleware)
-  messageController(app)
+  messageController(app, socket.sendMessage)
   authController(app)
 
   app.get('/ping', (req, res) => {
