@@ -20,17 +20,22 @@ class LoginContainer extends Component {
     }
   }
 
+  componentWillReceiveProps(props) {
+    if (props.auth) {
+      props.navigation.navigate('Dashboard')
+    }
+  }
+
   login = () => {
     Keyboard.dismiss()
     this.setState({ logging: true });
     const { username, password } = this.state
-    this.props.login(username, password)
+    this.props.login(username, password, () => this.setState({ logging: false }))
   }
 
   render() {
-    const { username, password } = this.props
+    const { username, password, error } = this.props
     return (
-
       <SpinnerHocComponent
         spinner={this.state.logging}
         style={styles.container}
@@ -47,17 +52,16 @@ class LoginContainer extends Component {
             <TextInput
               placeholder="Password"
               style={[styles.textInput, { marginVertical: 20 }]}
-              value={this.state.password}
+              value={password}
               autoCapitalize='none'
               onChangeText={(password) => this.setState({ 'password': password })}
             />
             <TouchableOpacity style={[styles.button]}
               onPress={this.login}
             >
-              <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}>
-                LOGIN
-          </Text>
+              <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}> LOGIN </Text>
             </TouchableOpacity>
+            {error && <Text> {error.data} </Text>}
           </View>
         </DismissKeyboardHoc>
       </SpinnerHocComponent >
@@ -66,7 +70,7 @@ class LoginContainer extends Component {
 }
 
 const mapStateToProps = function (state, ownProps) {
-  return {}
+  return { error: state.error, auth: state.auth }
 }
 
 export default connect(mapStateToProps, { login })(LoginContainer)

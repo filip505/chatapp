@@ -1,12 +1,16 @@
 import * as React from 'react'
 import { Component } from 'react'
 import { View, Text } from 'react-native'
-import spinnerHocComponent from '../../component/spinner.hoc.component';
 
 class Dashboard extends Component {
   static navigationOptions = {
     title: 'Dashboard',
+    headerLeft: null
   };
+
+  componentDidMount() {
+    //this.props.navigation.reset()
+  }
   render() {
     return (
       <View>
@@ -16,4 +20,4 @@ class Dashboard extends Component {
   }
 }
 
-export default spinnerHocComponent(Dashboard)
+export default Dashboard

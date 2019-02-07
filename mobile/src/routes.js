@@ -2,8 +2,7 @@ import * as React from "react";
 import { Component } from 'react'
 import { View, Text, StyleSheet, TextInput } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import LoginContainer from "./container/auth/Login.container";
-
+import { LoginContainer, DashboardContainer } from './container';
 class HomeScreen extends Component {
   render() {
     return (
@@ -19,8 +18,8 @@ const RootStack = createStackNavigator({
   Home: {
     screen: LoginContainer
   },
-  Login: {
-    screen: LoginContainer
+  Dashboard: {
+    screen: DashboardContainer
   }
 });
 

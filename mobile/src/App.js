@@ -6,6 +6,8 @@ import reducer from './reducer'
 import { Provider } from 'react-redux'
 import { applyMiddleware } from 'redux'
 import promise from 'redux-promise'
+import async from './middleware/async'
+import reduxThunk from 'redux-thunk'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -14,7 +16,7 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 
 export default class App extends Component {
   render() {
