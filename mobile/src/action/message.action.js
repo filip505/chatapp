@@ -1,6 +1,7 @@
 import Axios from 'axios'
+import { ERROR } from './error.action';
 
-export const LOGIN = 'LOGIN'
+export const SEND_MESSAGE = 'SEND_MESSAGE'
 
 export const login = (email, password, callback) => async dispatch => {
   try {

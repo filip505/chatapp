@@ -1,4 +1,3 @@
-import Person from './User'
 export default {
   name: "token",
   columns: {

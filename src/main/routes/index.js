@@ -1,6 +1,6 @@
 import authController from './auth.controller'
 import messageController from './message.controller'
-//import user from './user'
+import userController from './user.controller'
 
-export { authController, messageController }
+export { authController, messageController, userController }
 

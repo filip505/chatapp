@@ -15,7 +15,7 @@ class LoginContainer extends Component {
     super(props);
     this.state = {
       logging: false,
-      username: 'test@test.com',
+      username: 'test',
       password: 'test'
     }
   }

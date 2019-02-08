@@ -2,42 +2,38 @@ import * as React from 'react'
 import { Component } from 'react'
 import { View, Text } from 'react-native'
 import WS from 'react-native-websocket'
-import { AsyncStorage } from 'react-native'
+import { getUsers } from './../../action/user.action'
+import { connect } from 'react-redux'
+import { ForceTouchGestureHandler } from 'react-native-gesture-handler';
 
 class Dashboard extends Component {
   static navigationOptions = {
-    title: 'Dashboard',
+    title: 'Message',
     headerLeft: null
   };
 
-  constructor(props){
+  constructor(props) {
     super(props)
   }
 
   async componentDidMount() {
-    //this.props.navigation.reset()
-    const token = await AsyncStorage.getItem('token');
-   
-    this.state = {token}
-    console.log('token', JSON.stringify({token: this.state.token}))
+    this.props.getUsers(() => { })
   }
   render() {
+    const { users } = this.props
+    console.log('message', this.props)
     return (
       <View style={{ flex: 1 }}>
-        <WS
-          ref={ref => { this.ws = ref }}
-          url="ws://localhost:1337"
-          onOpen={() => {
-            this.ws.send(JSON.stringify({token: this.state.token}))
-          }}
-          onMessage={console.log}
-          onError={console.log}
-          onClose={console.log}
-          reconnect // Will try to reconnect onClose
-        />
+        {users && Object.values(users).map(value => <Text key={value.id}>{value.email}</Text>)}
       </View>
     )
   }
 }
 
-export default Dashboard
+const mapStateToProps = (props) => {
+  return {
+    users: props.users, error: props.error
+  }
+}
+
+export default connect(mapStateToProps, { getUsers })(Dashboard)

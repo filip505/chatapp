@@ -6,12 +6,11 @@ import http from 'http'
 import v1 from 'uuid'
 import { EntitySchema, createConnection } from 'typeorm'
 import { authMiddleware, oauthMiddleware } from './middleware'
-import { authController } from './routes'
+import { authController, userController, messageController } from './routes'
 import { User, Token, Message } from './models'
 import Fixtures from './fixtures'
 import cors from 'cors'
 import Socket from './socket'
-import messageController from './routes/message.controller';
 
 const config = {
   type: "postgres",
@@ -21,7 +20,7 @@ const config = {
   password: "node",
   database: "node",
   synchronize: false,
-  logging: true,
+  logging: false,
   migrations: ["./migration/*.js"],
   cli: {
     "migrationsDir": "migration"
@@ -51,6 +50,7 @@ export const server = async (port) => {
   app.use(authMiddleware)
   messageController(app, socket.sendMessage)
   authController(app)
+  userController(app)
 
   app.get('/ping', (req, res) => {
     res.send('pong')
