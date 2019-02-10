@@ -1,23 +1,38 @@
 import Axios from 'axios'
-import { ERROR } from './error.action';
-
+import { AsyncStorage } from 'react-native'
 export const SEND_MESSAGE = 'SEND_MESSAGE'
+export const STORE_MESSAGE = 'STORE_MESSAGE'
 
-export const login = (email, password, callback) => async dispatch => {
+export const sendMessage = (text, recieverId, callback) => async dispatch => {
   try {
-    const paylad = await Axios.post('http://localhost:5001/login', { email, password })
+    const token = await AsyncStorage.getItem('token');
+    console.log(text, recieverId)
+    const paylad = await Axios.post('http://localhost:5001/message', { text, recieverId }, {
+      headers: {
+        token
+      }
+    })
     console.log('payload', paylad)
     dispatch({
-      type: LOGIN,
+      type: SEND_MESSAGE,
       payload: paylad
     })
   } catch (exception) {
-
-    setTimeout(callback, 300)
+    if (callback) setTimeout(callback, 300)
     const { status, data } = exception.response
     dispatch({
-      type: ERROR,
+      type: 'ERROR',
       payload: { status, data }
     })
+  }
+}
+
+export const storeMessage = (message, auth) => {
+  const { recieverId, senderId } = message
+  const obj = { message }
+  obj.id = senderId == auth.id ? recieverId : senderId
+  return {
+    type: STORE_MESSAGE,
+    payload: obj
   }
 }

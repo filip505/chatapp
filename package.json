@@ -53,8 +53,6 @@
     ]
   },
   "jest": {
-    "setupFilesAfterEnv": [
-      "./src/test/setup.js"
-    ]
+    "rootDir": "./src/"
   }
 }

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Component } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import WS from 'react-native-websocket'
 import { getUsers } from './../../action/user.action'
 import { connect } from 'react-redux'
@@ -20,11 +20,20 @@ class Dashboard extends Component {
     this.props.getUsers(() => { })
   }
   render() {
-    const { users } = this.props
+    const { users, navigation } = this.props
     console.log('message', this.props)
     return (
       <View style={{ flex: 1 }}>
-        {users && Object.values(users).map(value => <Text key={value.id}>{value.email}</Text>)}
+        {users && Object.values(users).map(value => {
+          return (
+            <TouchableOpacity
+              onPress={()=> navigation.navigate('Message', {id: value.id})}
+            >
+              <Text key={value.id}>{value.email}</Text>
+            </TouchableOpacity>
+          )
+        })
+        }
       </View>
     )
   }

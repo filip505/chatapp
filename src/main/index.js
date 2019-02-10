@@ -37,11 +37,11 @@ export const server = async (port) => {
   const fixtures = new Fixtures(connection)
   const socket = new Socket()
   await connection.runMigrations()
-  console.log('is clean', config.entities.length)
-  if (process.env.NODE_ENV === 'test') {
+  // console.log('is clean', config.entities.length)
+  // if (process.env.NODE_ENV === 'test') {
 
 
-  }
+  // }
 
   let app = express()
 
@@ -52,25 +52,18 @@ export const server = async (port) => {
   authController(app)
   userController(app)
 
-  app.get('/ping', (req, res) => {
-    res.send('pong')
-  })
-
-  app.get('/ping2', oauthMiddleware('user'), (req, res) => {
-    res.send('pong')
-  })
-
   app = http.createServer(app)
-
-  app.closeAll = () => {
+  
+  const server = await app.listen(port)
+  server.closeAll = () => {
+    console.log('close all')
     connection.close()
-    app.close()
+    server.close()
+    socket.connection.close()
   }
-
-  return app.listen(port, () => {
-    console.log('___________________________')
-    console.log('server started at port' + port)
-    console.log('server env ' + process.env.NODE_ENV)
-    console.log('database name ' + config.database)
-  })
+  console.log('___________________________')
+  console.log('server started at port' + port)
+  console.log('server env ' + process.env.NODE_ENV)
+  console.log('database name ' + config.database)
+  return server
 }

@@ -3,14 +3,10 @@ import axios from 'axios'
 
 describe('sign in user', () => {
 
-  let app, fixtures
+  let app
 
   beforeAll(async () => {
     app = await server(5001)
-  })
-
-  afterAll(() => {
-    app.closeAll()
   })
 
   it('sing in user 200', async (done) => {
@@ -32,4 +28,7 @@ describe('sign in user', () => {
     })
   })
 
+  afterAll(() => {
+    app.closeAll()
+  })
 })

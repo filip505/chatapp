@@ -8,6 +8,7 @@ import { applyMiddleware } from 'redux'
 import promise from 'redux-promise'
 import async from './middleware/async'
 import reduxThunk from 'redux-thunk'
+import Socket from './socket'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -18,12 +19,15 @@ const instructions = Platform.select({
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 
+const init = { message: {} }
 export default class App extends Component {
   render() {
 
     return (
-      <Provider store={createStoreWithMiddleware(reducer, {}, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
-        <MainNavigator />
+      <Provider store={createStoreWithMiddleware(reducer, init, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
+        <Socket>
+          <MainNavigator />
+        </Socket>
       </Provider>
     );
 

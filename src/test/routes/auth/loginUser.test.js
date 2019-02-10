@@ -10,10 +10,6 @@ describe('login user', () => {
     app = await server(5001)
   })
 
-  afterAll(() => {
-    app.closeAll()
-  })
-
   it('login user 200', async (done) => {
     fixtures = new Fixtures()
     const user = await fixtures.createUser('test@test.com', 'test')
@@ -46,6 +42,10 @@ describe('login user', () => {
       expect(response.status).toEqual(403)
       done()
     })
+  })
+
+  afterAll(() => {
+    app.closeAll()
   })
 
 })
