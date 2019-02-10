@@ -27,9 +27,10 @@ class Dashboard extends Component {
         {users && Object.values(users).map(value => {
           return (
             <TouchableOpacity
+              key={value.id}
               onPress={()=> navigation.navigate('Message', {id: value.id})}
             >
-              <Text key={value.id}>{value.email}</Text>
+              <Text>{value.email}</Text>
             </TouchableOpacity>
           )
         })

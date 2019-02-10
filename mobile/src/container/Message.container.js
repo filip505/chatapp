@@ -6,6 +6,9 @@ import { AsyncStorage, StyleSheet, TouchableOpacity } from 'react-native'
 import { getUsers } from './../action/user.action'
 import { connect } from 'react-redux'
 import { sendMessage } from './../action/message.action'
+import BubbleChatItem from '../component/bubble.chat.item';
+import BubbleComponent from '../component/bubble.component';
+
 
 class Dashboard extends Component {
   static navigationOptions = {
@@ -21,18 +24,30 @@ class Dashboard extends Component {
     this.props.sendMessage(this.state.text, conversationId)
   }
 
+  renderMessage = (item) => {
+    const { auth } = this.props
+    console.log('tu', item.senderId == auth.user.id)
+    return (
+      <BubbleComponent side={item.senderId == auth.user.id}>
+        <BubbleChatItem message={item} />
+      </BubbleComponent >
+    )
+  }
+
   async componentDidMount() {
     //this.props.navigation.reset()
     const token = await AsyncStorage.getItem('token');
     this.state = { token }
   }
+
   render() {
-    const { message, conversationId } = this.props
+    const { message, conversationId, auth } = this.props
     return (
       <View style={{ flex: 1, backgroundColor: '#f2f2f2' }}>
         <FlatList style={styles.list}
           data={message}
-          renderItem={({ item }) => <Text>{item.text}</Text>}
+          // renderItem={({ item }) => <BubbleComponent ><BubbleChatItem message={item}/></BubbleComponent>}
+          renderItem={({ item }) => this.renderMessage(item)}
           keyExtractor={(item) => item.id}
         />
         <View style={styles.bottomBar}>
@@ -55,9 +70,9 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = function (state, ownProps) {
-  const { error, message } = state
+  const { error, message, auth } = state
   const id = ownProps.navigation.getParam('id')
-  return { error, message: message[id] ? message[id].slice() : [], conversationId: id }
+  return { error, message: message[id] ? message[id].slice() : [], conversationId: id, auth }
 }
 
 export default connect(mapStateToProps, { sendMessage })(Dashboard)
