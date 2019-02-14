@@ -9,11 +9,11 @@ import reduxThunk from 'redux-thunk'
 import { compose, createStore } from 'redux';
 import persistState from 'redux-localstorage'
 import Socket from './socket'
-import configureStore from './configureStore'
+import {persistor, store} from './configureStore'
 import { RSA, RSAKeychain } from 'react-native-rsa-native';
+import { Navigation } from 'react-navigation'
 import { PersistGate } from 'redux-persist/es/integration/react'
 
-const { persistor, store } = configureStore();
 
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -55,7 +55,7 @@ export default class App extends Component {
           onBeforeLift={this.onBeforeLift}
           persistor={persistor}>
           <Socket>
-            {gateLifted && <MainNavigator />}
+            {gateLifted && <MainNavigator onNavigationStateChange={() => ({persistor})} />}
             {!gateLifted && <SplashScreen />}
           </Socket>
         </PersistGate>

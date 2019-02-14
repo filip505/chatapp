@@ -28,7 +28,7 @@ class LoginContainer extends Component {
 
   login = () => {
     Keyboard.dismiss()
-    this.setState({ logging: true });
+    //this.setState({ logging: true });
     const { username, password } = this.state
     this.props.login(username, password, () => this.setState({ logging: false }))
   }

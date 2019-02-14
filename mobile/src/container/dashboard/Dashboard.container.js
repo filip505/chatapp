@@ -1,16 +1,19 @@
 import * as React from 'react'
 import { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Button, AsyncStorage } from 'react-native'
 import WS from 'react-native-websocket'
 import { getUsers } from './../../action/user.action'
+import { logout } from './../../action/auth.action'
 import { connect } from 'react-redux'
 import { ForceTouchGestureHandler } from 'react-native-gesture-handler';
+import { persistStore } from 'redux-persist';
 
 class Dashboard extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({navigation}) => ({
     title: 'Message',
-    headerLeft: null
-  };
+    headerLeft: null,
+    headerRight: <Button title='logout' onPress={() => { logout(), navigation.navigate('Home') }}></Button>
+  });
 
   constructor(props) {
     super(props)
@@ -28,7 +31,8 @@ class Dashboard extends Component {
           return (
             <TouchableOpacity
               key={value.id}
-              onPress={()=> navigation.navigate('Message', {id: value.id})}
+              onPress={() => { this.props.logout(), this.props.navigation.navigate('Home') }}
+            // onPress={() => navigation.navigate('Message', { id: value.id })}
             >
               <Text>{value.email}</Text>
             </TouchableOpacity>
@@ -46,4 +50,4 @@ const mapStateToProps = (props) => {
   }
 }
 
-export default connect(mapStateToProps, { getUsers })(Dashboard)
+export default connect(mapStateToProps, { getUsers, logout })(Dashboard)
