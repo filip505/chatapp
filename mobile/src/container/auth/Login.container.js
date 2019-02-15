@@ -5,6 +5,7 @@ import SpinnerHocComponent from '../../component/spinner.hoc';
 import DismissKeyboardHoc from '../../component/dismissKeyboard.hoc'
 import { connect } from 'react-redux'
 import { login } from './../../action/auth.action'
+import { RSA, RSAKeychain } from 'react-native-rsa-native';
 
 class LoginContainer extends Component {
   static navigationOptions = {
@@ -22,7 +23,7 @@ class LoginContainer extends Component {
 
   componentWillReceiveProps(props) {
     if (props.auth) {
-      props.navigation.navigate('Dashboard')
+      props.navigation.navigate('SignedIn')
     }
   }
 

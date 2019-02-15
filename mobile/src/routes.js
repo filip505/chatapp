@@ -1,48 +1,40 @@
-import * as React from "react";
-import { Component } from 'react'
-import { View, Text, StyleSheet, TextInput } from "react-native";
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import { createStackNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
 import { LoginContainer, MessageContainer, DashboardContainer } from './container';
-class HomeScreen extends Component {
-  render() {
-    return (
-      <View>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-      </View>
-    );
-  }
-}
 
-const RootStack = createStackNavigator({
+const SignedIn = createStackNavigator({
   Home: {
-    screen: LoginContainer
-  },
-  Dashboard: {
     screen: DashboardContainer
   },
+  // Dashboard: {
+  //   screen: DashboardContainer
+  // },
   Message: {
     screen: MessageContainer
   }
 });
 
-export default createAppContainer(RootStack)
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+const SignedOut = createStackNavigator({
+  Home: {
+    screen: LoginContainer
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  // Dashboard: {
+  //   screen: DashboardContainer
+  // },
+  // Message: {
+  //   screen: MessageContainer
+  // }
 });
+
+export default createRootNavigator = (signedIn = false) => {
+  return createAppContainer(createSwitchNavigator(
+    {
+      SignedIn,
+      SignedOut
+    },
+    {
+      initialRouteName: signedIn ? "SignedIn" : "SignedOut"
+    }
+  ));
+};
+
+

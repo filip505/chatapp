@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, TextInput } from 'react-native';
-import MainNavigator from './routes'
+import createRootNavigator from './routes'
 import reducer from './reducer'
 import { Provider } from 'react-redux'
 import promise from 'redux-promise'
@@ -9,9 +9,8 @@ import reduxThunk from 'redux-thunk'
 import { compose, createStore } from 'redux';
 import persistState from 'redux-localstorage'
 import Socket from './socket'
-import {persistor, store} from './configureStore'
+import { persistor, store } from './configureStore'
 import { RSA, RSAKeychain } from 'react-native-rsa-native';
-import { Navigation } from 'react-navigation'
 import { PersistGate } from 'redux-persist/es/integration/react'
 
 
@@ -46,7 +45,10 @@ export default class App extends Component {
     //     console.log('4096 private:', keys.private) // the private key
     //     console.log('4096 public:', keys.public) // the public key
     //   })
-    console.log('loading', this.state)
+    console.log('loading')
+    const MainNavigator = createRootNavigator();
+
+
     const { gateLifted } = this.state
     return (
       //<Provider store={createStoreWithMiddleware(reducer, init, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
@@ -55,7 +57,7 @@ export default class App extends Component {
           onBeforeLift={this.onBeforeLift}
           persistor={persistor}>
           <Socket>
-            {gateLifted && <MainNavigator onNavigationStateChange={() => ({persistor})} />}
+            {gateLifted && <MainNavigator />}
             {!gateLifted && <SplashScreen />}
           </Socket>
         </PersistGate>

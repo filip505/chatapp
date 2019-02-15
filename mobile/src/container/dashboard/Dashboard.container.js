@@ -12,7 +12,7 @@ class Dashboard extends Component {
   static navigationOptions = ({navigation}) => ({
     title: 'Message',
     headerLeft: null,
-    headerRight: <Button title='logout' onPress={() => { logout(), navigation.navigate('Home') }}></Button>
+    headerRight: <Button title='logout' onPress={() => { logout(), navigation.navigate('SignedOut') }}></Button>
   });
 
   constructor(props) {
@@ -31,8 +31,7 @@ class Dashboard extends Component {
           return (
             <TouchableOpacity
               key={value.id}
-              onPress={() => { this.props.logout(), this.props.navigation.navigate('Home') }}
-            // onPress={() => navigation.navigate('Message', { id: value.id })}
+              onPress={() => navigation.navigate('Message', { id: value.id })}
             >
               <Text>{value.email}</Text>
             </TouchableOpacity>

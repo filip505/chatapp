@@ -6,12 +6,13 @@ import { AsyncStorage } from 'react-native'
 import appReducer from './reducer'
 import reduxThunk from 'redux-thunk'
 
+const init = { message: {} }
 const rootReducer = (state, action) => {
   if (action.type === 'USER_LOGOUT') {
     Object.keys(state).forEach(key => {
       AsyncStorage.removeItem(`persist:${key}`);
     });
-    state = undefined;
+    state = init;
   }
 
   return appReducer(state, action)
@@ -22,7 +23,6 @@ const persistConfig = {
   storage,
 }
 
-const init = { message: {} }
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
