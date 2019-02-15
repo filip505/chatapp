@@ -2,10 +2,10 @@ import Axios from 'axios'
 import { dispatch } from './../configureStore'
 export const LOGIN = 'LOGIN'
 
-export const login = (email, password, callback) => async dispatch => {
+export const login = async (email, password, key, callback) => {
   try {
     console.log('payload')
-    const paylad = await Axios.post('http://localhost:5001/login', { email, password })
+    const paylad = await Axios.post('http://localhost:5001/login', { email, password, key })
     console.log('payload', paylad)
     dispatch({
       type: LOGIN,

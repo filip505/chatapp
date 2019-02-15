@@ -21,8 +21,6 @@ export default class {
       } catch (error) {
         console.log('error ' + msg.recieverId, error)
       }
-
-
     });
   }
 

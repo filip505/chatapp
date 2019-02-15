@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Component } from 'react'
-import { Text, View, TextInput, StyleSheet, TouchableOpacity, Keyboard } from 'react-native'
+import { Text, View, TextInput, StyleSheet, TouchableOpacity, Keyboard, AsyncStorage } from 'react-native'
 import SpinnerHocComponent from '../../component/spinner.hoc';
 import DismissKeyboardHoc from '../../component/dismissKeyboard.hoc'
 import { connect } from 'react-redux'
@@ -27,11 +27,18 @@ class LoginContainer extends Component {
     }
   }
 
-  login = () => {
+  loginHandler = async () => {
     Keyboard.dismiss()
     //this.setState({ logging: true });
     const { username, password } = this.state
-    this.props.login(username, password, () => this.setState({ logging: false }))
+    const keys = await RSA.generateKeys(4096)
+    // .then(keys => {
+    //   console.log('4096 private:', keys.private) // the private key
+    //   console.log('4096 public:', keys.public) // the public key
+    // })
+    await AsyncStorage.setItem('private_key', keys.private)
+    console.log('key', login)
+    login(username, password, keys.public, () => this.setState({ logging: false }))
   }
 
   render() {
@@ -58,14 +65,14 @@ class LoginContainer extends Component {
               onChangeText={(password) => this.setState({ 'password': password })}
             />
             <TouchableOpacity style={[styles.button]}
-              onPress={this.login}
+              onPress={this.loginHandler}
             >
               <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}> LOGIN </Text>
             </TouchableOpacity>
             {error && <Text> {error.data} </Text>}
           </View>
         </DismissKeyboardHoc>
-      </SpinnerHocComponent >
+      </SpinnerHocComponent>
     )
   }
 }
@@ -74,7 +81,7 @@ const mapStateToProps = function (state, ownProps) {
   return { error: state.error, auth: state.auth }
 }
 
-export default connect(mapStateToProps, { login })(LoginContainer)
+export default connect(mapStateToProps)(LoginContainer)
 
 const styles = StyleSheet.create({
   container: {

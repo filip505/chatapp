@@ -20,11 +20,15 @@ class Dashboard extends Component {
     this.state = { text: '' }
   }
 
-  sendMessage = (conversationId) => {
-    this.props.sendMessage(this.state.text, conversationId)
+  componentWillMount() {
+
   }
 
-  renderMessage = (item) => {
+  sendMessage(userId) {
+    this.props.sendMessage(this.state.text, userId)
+  }
+
+  renderMessage(item) {
     const { auth } = this.props
     console.log('tu', item.senderId == auth.user.id)
     return (
@@ -41,7 +45,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { message, conversationId, auth } = this.props
+    const { message, userId, auth } = this.props
     return (
       <View style={{ flex: 1, backgroundColor: '#f2f2f2' }}>
         <FlatList style={styles.list}
@@ -52,7 +56,7 @@ class Dashboard extends Component {
         />
         <View style={styles.bottomBar}>
           <TouchableOpacity style={[styles.button]}
-            onPress={() => this.sendMessage(conversationId)}
+            onPress={() => this.sendMessage(userId)}
           >
             <Text style={{ color: 'white', fontSize: 15, fontWeight: '600' }}> SEND </Text>
           </TouchableOpacity>
@@ -72,7 +76,7 @@ class Dashboard extends Component {
 const mapStateToProps = function (state, ownProps) {
   const { error, message, auth } = state
   const id = ownProps.navigation.getParam('id')
-  return { error, message: message[id] ? message[id].slice() : [], conversationId: id, auth }
+  return { error, message: message[id] ? message[id].slice() : [], userId: id, auth }
 }
 
 export default connect(mapStateToProps, { sendMessage })(Dashboard)

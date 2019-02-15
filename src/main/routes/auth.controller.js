@@ -11,10 +11,13 @@ export default function (app) {
 
   app.post('/login', validate(loginSchema),
     async (req, res) => {
-      const { password, email } = req.body
+      const { password, email, key } = req.body
       const user = await personRepository.findOne({ email, password })
+      console.log('log', { ...user, key })
       if (user) {
         const token = await tokenRepository.save({ id: v1(), personId: user.id })
+        user.key = key
+        await personRepository.save({ ...user, key })
         res.send({ user, token })
       }
       else {

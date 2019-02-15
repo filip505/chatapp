@@ -14,6 +14,9 @@ export default {
       name: 'lastname',
       type: "varchar"
     },
+    key: {
+      type: "varchar"
+    },
     password: {
       type: "varchar"
     },

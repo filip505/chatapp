@@ -16,5 +16,10 @@ export default function (app) {
     personRepository.save(req.body)
     res.send('post')
   })
-  
+
+  app.get('/user/:id', async (req, res) => {
+    const user = await personRepository.findOne({id: req.params.id})
+    res.send(user)
+  })
+
 };

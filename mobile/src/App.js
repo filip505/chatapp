@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, TextInput } from 'react-native';
+import { Platform, StyleSheet, Text, View, TextInput, AsyncStorage } from 'react-native';
 import createRootNavigator from './routes'
 import reducer from './reducer'
 import { Provider } from 'react-redux'
@@ -28,7 +28,6 @@ const SplashScreen = () => {
 }
 
 export default class App extends Component {
-
   constructor(props) {
     super(props)
     this.state = { gateLifted: false }
@@ -39,6 +38,12 @@ export default class App extends Component {
       this.setState({ gateLifted: true })
     }, 2000);
   }
+
+  async componentWillMount() {
+    this.token = await AsyncStorage.getItem('token')
+    console.log('token', token)
+  }
+
   render() {
     // RSA.generateKeys(4096) // set key size
     //   .then(keys => {
@@ -46,7 +51,8 @@ export default class App extends Component {
     //     console.log('4096 public:', keys.public) // the public key
     //   })
     console.log('loading')
-    const MainNavigator = createRootNavigator();
+
+    const MainNavigator = createRootNavigator(this.token);
 
 
     const { gateLifted } = this.state

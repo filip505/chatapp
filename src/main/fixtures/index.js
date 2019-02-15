@@ -4,24 +4,26 @@ import { getRepository } from 'typeorm'
 export default class Fixtures {
 
   async init() {
-    await this.createUser()
+    await this.createUser({
+      email: 'test',
+      password: 'test',
+      firstName: 'test',
+      lastName: 'test',
+      id: v1(),
+      tokens: [],
+    })
+    await this.createUser({
+      email: 'test1',
+      password: 'test1',
+      firstName: 'test1',
+      lastName: 'test1',
+      id: v1(),
+      tokens: [],
+    })
   }
 
-  async createUser(
-    email = 'test',
-    password = 'test',
-    firstName = 'test',
-    lastName = 'test',
-    id = v1(),
-    tokens = [],
-  ) {
-    return await getRepository('person').save({
-      id,
-      email,
-      password,
-      firstName,
-      lastName
-    })
+  async createUser(user) {
+    return await getRepository('person').save(user)
   }
 
   async createToken(

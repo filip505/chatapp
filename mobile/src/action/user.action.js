@@ -25,3 +25,4 @@ export const getUsers = (callback) => async dispatch => {
     })
   }
 }
+

@@ -19,7 +19,7 @@ class Socket extends Component {
           onMessage={(event) => storeMessage(JSON.parse(event.data), auth.user)}
           // onError={(event) => console.log('onError', event)}
           // onClose={(event) => console.log('onClose', event)}
-          reconnect // Will try to reconnect onClose
+           // Will try to reconnect onClose
         />}
 
         {this.props.children}

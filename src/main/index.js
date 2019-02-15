@@ -4,7 +4,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import http from 'http'
 import v1 from 'uuid'
-import { EntitySchema, createConnection } from 'typeorm'
+import { EntitySchema, createConnection, getRepository } from 'typeorm'
 import { authMiddleware, oauthMiddleware } from './middleware'
 import { authController, userController, messageController } from './routes'
 import { User, Token, Message } from './models'
@@ -37,6 +37,12 @@ export const server = async (port) => {
   const fixtures = new Fixtures(connection)
   const socket = new Socket()
   await connection.runMigrations()
+ 
+  for (const entity of config.entities) {
+    const repository = await getRepository(entity.options.name);
+    await repository.query(`DELETE FROM ${entity.options.name};`);
+  }
+  fixtures.init()
   // console.log('is clean', config.entities.length)
   // if (process.env.NODE_ENV === 'test') {
 
