@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { sendMessage } from './../action/message.action'
 import BubbleChatItem from '../component/bubble.chat.item';
 import BubbleComponent from '../component/bubble.component';
+import { RSA } from 'react-native-rsa-native'
 
 class Dashboard extends Component {
   static navigationOptions = {
@@ -23,6 +24,18 @@ class Dashboard extends Component {
 
   }
 
+  async componentDidMount() {
+    //this.props.navigation.reset()
+    const token = await AsyncStorage.getItem('token');
+    this.state = { token }
+  }
+
+  async encriptAndSendMessage(message, user){
+    const encrypted = await RSA.encrypt(message, user.key)
+    console.log('encrypted')
+    sendMessage(encrypted, user)
+  }
+
   renderMessage(item) {
     const { auth } = this.props
     console.log('tu', item.senderId == auth.user.id)
@@ -31,12 +44,6 @@ class Dashboard extends Component {
         <BubbleChatItem message={item} />
       </BubbleComponent >
     )
-  }
-
-  async componentDidMount() {
-    //this.props.navigation.reset()
-    const token = await AsyncStorage.getItem('token');
-    this.state = { token }
   }
 
   render() {
@@ -51,7 +58,7 @@ class Dashboard extends Component {
         />
         <View style={styles.bottomBar}>
           <TouchableOpacity style={[styles.button]}
-            onPress={() => sendMessage(this.state.text, user)}
+            onPress={() => this.encriptAndSendMessage(this.state.text, user)}
           >
             <Text style={{ color: 'white', fontSize: 15, fontWeight: '600' }}> SEND </Text>
           </TouchableOpacity>
