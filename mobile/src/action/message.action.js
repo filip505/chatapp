@@ -1,13 +1,15 @@
 import Axios from 'axios'
+import { dispatch } from './../configureStore'
 import { AsyncStorage } from 'react-native'
+
 export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const STORE_MESSAGE = 'STORE_MESSAGE'
 
-export const sendMessage = (text, recieverId, callback) => async dispatch => {
+export const sendMessage = async (text, { id }, callback) => {
   try {
+    console.log('sending', text)
     const token = await AsyncStorage.getItem('token');
-    console.log(text, recieverId)
-    const paylad = await Axios.post('http://localhost:5001/message', { text, recieverId }, {
+    const paylad = await Axios.post('http://localhost:5001/message', { text, recieverId: id }, {
       headers: {
         token
       }
@@ -19,6 +21,7 @@ export const sendMessage = (text, recieverId, callback) => async dispatch => {
     })
   } catch (exception) {
     if (callback) setTimeout(callback, 300)
+    console.log('exception', exception)
     const { status, data } = exception.response
     dispatch({
       type: 'ERROR',
@@ -31,8 +34,8 @@ export const storeMessage = (message, auth) => {
   const { recieverId, senderId } = message
   const obj = { message }
   obj.id = senderId == auth.id ? recieverId : senderId
-  return {
+  dispatch({
     type: STORE_MESSAGE,
     payload: obj
-  }
+  })
 }

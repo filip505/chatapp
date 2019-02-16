@@ -1,13 +1,13 @@
 import { createStackNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
-import { LoginContainer, MessageContainer, DashboardContainer } from './container';
+import { LoginContainer, MessageContainer, DashboardContainer, AddContactContainer } from './container';
 
 const SignedIn = createStackNavigator({
   Home: {
     screen: DashboardContainer
   },
-  // Dashboard: {
-  //   screen: DashboardContainer
-  // },
+  AddContact: {
+    screen: AddContactContainer
+  },
   Message: {
     screen: MessageContainer
   }

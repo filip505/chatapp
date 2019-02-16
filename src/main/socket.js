@@ -14,12 +14,12 @@ export default class {
       try {
         this.connections[msg.senderId].send(JSON.stringify(msg))
       } catch (error) {
-        console.log('error', error)
+        console.log('error', 'faild delivered message to sender id: '+senderId)
       }
       try {
         this.connections[msg.recieverId].send(JSON.stringify(msg))
       } catch (error) {
-        console.log('error ' + msg.recieverId, error)
+        console.log('error ',  'faild delivered message to sender id: '+recieverId)
       }
     });
   }
@@ -59,7 +59,6 @@ export default class {
           }
         }
       });
-
       connection.on('close', function (connection) {
         console.log('connection closed')
       });

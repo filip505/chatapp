@@ -9,7 +9,6 @@ import { sendMessage } from './../action/message.action'
 import BubbleChatItem from '../component/bubble.chat.item';
 import BubbleComponent from '../component/bubble.component';
 
-
 class Dashboard extends Component {
   static navigationOptions = {
     title: 'Message',
@@ -22,10 +21,6 @@ class Dashboard extends Component {
 
   componentWillMount() {
 
-  }
-
-  sendMessage(userId) {
-    this.props.sendMessage(this.state.text, userId)
   }
 
   renderMessage(item) {
@@ -45,7 +40,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { message, userId, auth } = this.props
+    const { message, user, auth } = this.props
     return (
       <View style={{ flex: 1, backgroundColor: '#f2f2f2' }}>
         <FlatList style={styles.list}
@@ -56,7 +51,7 @@ class Dashboard extends Component {
         />
         <View style={styles.bottomBar}>
           <TouchableOpacity style={[styles.button]}
-            onPress={() => this.sendMessage(userId)}
+            onPress={() => sendMessage(this.state.text, user)}
           >
             <Text style={{ color: 'white', fontSize: 15, fontWeight: '600' }}> SEND </Text>
           </TouchableOpacity>
@@ -74,12 +69,12 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = function (state, ownProps) {
-  const { error, message, auth } = state
+  const { error, message, auth, users} = state
   const id = ownProps.navigation.getParam('id')
-  return { error, message: message[id] ? message[id].slice() : [], userId: id, auth }
+  return { error, message: message[id] ? message[id].slice() : [], user: users[id], auth }
 }
 
-export default connect(mapStateToProps, { sendMessage })(Dashboard)
+export default connect(mapStateToProps)(Dashboard)
 
 const styles = StyleSheet.create({
 

@@ -11,17 +11,14 @@ import { persistStore } from 'redux-persist';
 class Dashboard extends Component {
   static navigationOptions = ({navigation}) => ({
     title: 'Message',
-    headerLeft: null,
-    headerRight: <Button title='logout' onPress={() => { logout(), navigation.navigate('SignedOut') }}></Button>
+    headerLeft: <Button title='logout' onPress={() => { logout(), navigation.navigate('SignedOut') }}></Button>,
+    headerRight: <Button title='add Contact' onPress={() => { navigation.navigate('AddContact') }}></Button>
   });
 
   constructor(props) {
     super(props)
   }
 
-  async componentDidMount() {
-    this.props.getUsers(() => { })
-  }
   render() {
     const { users, navigation } = this.props
     console.log('message', this.props)
@@ -49,4 +46,4 @@ const mapStateToProps = (props) => {
   }
 }
 
-export default connect(mapStateToProps, { getUsers, logout })(Dashboard)
+export default connect(mapStateToProps)(Dashboard)

@@ -7,7 +7,7 @@ import { storeMessage } from './action/message.action'
 class Socket extends Component {
 
   render() {
-    const { auth, storeMessage } = this.props
+    const { auth } = this.props
     return (
       <View style={{ flex: 1 }}>
         {auth && <WS
@@ -19,7 +19,7 @@ class Socket extends Component {
           onMessage={(event) => storeMessage(JSON.parse(event.data), auth.user)}
           // onError={(event) => console.log('onError', event)}
           // onClose={(event) => console.log('onClose', event)}
-           // Will try to reconnect onClose
+          reconnect // Will try to reconnect onClose
         />}
 
         {this.props.children}
@@ -32,4 +32,4 @@ class Socket extends Component {
 const mapStateToProps = props => {
   return { auth: props.auth }
 }
-export default connect(mapStateToProps, { storeMessage })(Socket)
+export default connect(mapStateToProps)(Socket)

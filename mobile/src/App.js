@@ -13,7 +13,6 @@ import { persistor, store } from './configureStore'
 import { RSA, RSAKeychain } from 'react-native-rsa-native';
 import { PersistGate } from 'redux-persist/es/integration/react'
 
-
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
 //   android:
