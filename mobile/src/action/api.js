@@ -14,6 +14,7 @@ async function call(type, method, config) {
   const headers = (config) ? config.headers : {}
   const request = {
     ...config,
+    timeout: 1000,
     method,
     baseURL,
     headers: { ...headers, token }
