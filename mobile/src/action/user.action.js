@@ -8,7 +8,7 @@ export const GET_USER = 'GET_USER'
 export const getUsers = (callback) => async dispatch => {
   try {
     const token = await AsyncStorage.getItem('token');
-    const paylad = await Axios.get('http://localhost:5001/user', {
+    const paylad = await Axios.get('http://192.168.178.53:5001/user', {
       headers: { token }
     })
     dispatch({

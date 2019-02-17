@@ -1,18 +1,11 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, TextInput, AsyncStorage } from 'react-native';
+import { Text, View, AsyncStorage } from 'react-native';
 import createRootNavigator from './routes'
-import reducer from './reducer'
 import { Provider } from 'react-redux'
-import promise from 'redux-promise'
-import async from './middleware/async'
-import reduxThunk from 'redux-thunk'
-import { compose, createStore } from 'redux';
-import persistState from 'redux-localstorage'
 import Socket from './socket'
 import { persistor, store } from './configureStore'
-import { RSA, RSAKeychain } from 'react-native-rsa-native';
 import { PersistGate } from 'redux-persist/es/integration/react'
-
+import { RSA } from 'react-native-rsa-native';
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
 //   android:
@@ -31,32 +24,25 @@ export default class App extends Component {
     super(props)
     this.state = { gateLifted: false }
   }
-  onBeforeLift = () => {
-    console.log('onBeforeLift')
-    setTimeout(() => {
-      this.setState({ gateLifted: true })
-    }, 2000);
-  }
 
   async componentWillMount() {
     this.token = await AsyncStorage.getItem('token')
-    console.log('token', token)
+    this.MainNavigator = createRootNavigator(this.token);
+  }
+
+  onBeforeLift = async () => {
+    if (!this.token) {
+      const keys = await RSA.generateKeys(4096)
+      await AsyncStorage.setItem('private_key', keys.private)
+      await AsyncStorage.setItem('public_key', keys.public)
+    }
+    this.setState({ gateLifted: true })
   }
 
   render() {
-    // RSA.generateKeys(4096) // set key size
-    //   .then(keys => {
-    //     console.log('4096 private:', keys.private) // the private key
-    //     console.log('4096 public:', keys.public) // the public key
-    //   })
-    console.log('loading')
-
-    const MainNavigator = createRootNavigator(this.token);
-
-
     const { gateLifted } = this.state
+    const MainNavigator = this.MainNavigator
     return (
-      //<Provider store={createStoreWithMiddleware(reducer, init, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
       <Provider store={store}>
         <PersistGate
           onBeforeLift={this.onBeforeLift}

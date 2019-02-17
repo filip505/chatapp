@@ -5,7 +5,8 @@ import SpinnerHocComponent from '../../component/spinner.hoc';
 import DismissKeyboardHoc from '../../component/dismissKeyboard.hoc'
 import { connect } from 'react-redux'
 import { login } from './../../action/auth.action'
-import { RSA, RSAKeychain } from 'react-native-rsa-native';
+
+import { isLoading, isSuccess, isError } from '../../util/actionPhaseUtil'
 
 class LoginContainer extends Component {
   static navigationOptions = {
@@ -22,30 +23,23 @@ class LoginContainer extends Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.auth) {
+    if (isSuccess(props.auth.phase)) {
       props.navigation.navigate('SignedIn')
     }
   }
 
   loginHandler = async () => {
-    Keyboard.dismiss()
-    //this.setState({ logging: true });
     const { username, password } = this.state
-    const keys = await RSA.generateKeys(4096)
-    // .then(keys => {
-    //   console.log('4096 private:', keys.private) // the private key
-    //   console.log('4096 public:', keys.public) // the public key
-    // })
-    await AsyncStorage.setItem('private_key', keys.private)
-    console.log('key', login)
-    login(username, password, keys.public, () => this.setState({ logging: false }))
+    const key = await AsyncStorage.getItem('public_key')
+    Keyboard.dismiss()
+    login(username, password, key)
   }
 
   render() {
-    const { username, password, error } = this.props
+    const { username, password, auth } = this.props
     return (
       <SpinnerHocComponent
-        spinner={this.state.logging}
+        spinner={isLoading(auth.phase)}
         style={styles.container}
       >
         <DismissKeyboardHoc>
@@ -69,7 +63,7 @@ class LoginContainer extends Component {
             >
               <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}> LOGIN </Text>
             </TouchableOpacity>
-            {error && <Text> {error.data} </Text>}
+            {isError(auth.phase) && <Text> Error </Text>}
           </View>
         </DismissKeyboardHoc>
       </SpinnerHocComponent>
@@ -78,7 +72,7 @@ class LoginContainer extends Component {
 }
 
 const mapStateToProps = function (state, ownProps) {
-  return { error: state.error, auth: state.auth }
+  return { auth: state.auth }
 }
 
 export default connect(mapStateToProps)(LoginContainer)

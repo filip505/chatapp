@@ -21,7 +21,7 @@ class Socket extends Component {
     this.setPrivateKey()
     return (
       <View style={{ flex: 1 }}>
-        {auth && <WS
+        {/* {auth && <WS
           ref={ref => { this.ws = ref }}
           url="ws://localhost:1337"
           onOpen={() => {
@@ -31,7 +31,7 @@ class Socket extends Component {
           // onError={(event) => console.log('onError', event)}
           // onClose={(event) => console.log('onClose', event)}
           reconnect // Will try to reconnect onClose
-        />}
+        />} */}
 
         {this.props.children}
       </View>

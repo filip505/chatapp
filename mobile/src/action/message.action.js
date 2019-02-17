@@ -9,7 +9,7 @@ export const sendMessage = async (text, { id }, callback) => {
   try {
     console.log('sending', text)
     const token = await AsyncStorage.getItem('token');
-    const paylad = await Axios.post('http://localhost:5001/message', { text, recieverId: id }, {
+    const paylad = await Axios.post('http://192.168.178.53:5001/message', { text, recieverId: id }, {
       headers: {
         token
       }
