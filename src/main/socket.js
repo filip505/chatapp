@@ -10,12 +10,12 @@ export default class {
 
   sendMessage = (msg) => {
     return new Promise((resolve, reject) => {
-      console.log('msg', msg)
-      try {
-        this.connections[msg.senderId].send(JSON.stringify(msg))
-      } catch (error) {
-        console.log('error', 'faild delivered message to sender id: '+senderId)
-      }
+      //console.log('msg', msg)
+      // try {
+      //   this.connections[msg.senderId].send(JSON.stringify(msg))
+      // } catch (error) {
+      //   console.log('error', 'faild delivered message to sender id: '+senderId)
+      // }
       try {
         this.connections[msg.recieverId].send(JSON.stringify(msg))
       } catch (error) {

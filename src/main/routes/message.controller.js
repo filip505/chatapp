@@ -12,6 +12,7 @@ export default function (app, sendMessage) {
   app.post('/message', oauthMiddleware('user'),
     async (req, res) => {
       const store = { ...req.body, id: v1(), senderId: req.user.id }
+      console.log('recived', req.body)
       await messageRepository.save(store)
       sendMessage(store)
       res.send(store)

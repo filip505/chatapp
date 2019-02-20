@@ -22,6 +22,12 @@ export default {
     },
     email: {
       type: "varchar"
+    },
+    number: {
+      type: "varchar"
+    },
+    image: {
+      type: "varchar"
     }
   },
   relations: {

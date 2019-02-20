@@ -1,7 +1,7 @@
-import DashboardContainer from './dashboard/Dashboard.container'
-import LoginContainer from './auth/Login.container'
-import MessageContainer from './Message.container'
-import AddContactContainer from './AddContactContainer'
+import DashboardContainer from './signedIn/Dashboard.container'
+import LoginContainer from './signedOut/Login.container'
+import MessageContainer from './signedIn/Message.container'
+import AddContactContainer from './signedIn/AddContactContainer'
 
 export {
   DashboardContainer,

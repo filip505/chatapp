@@ -10,6 +10,8 @@ export default class Fixtures {
       firstName: 'test',
       lastName: 'test',
       id: v1(),
+      image: 'https://cdn.iconscout.com/icon/free/png-256/avatar-375-456327.png',
+      number: '+4915',
       tokens: [],
     })
     await this.createUser({
@@ -18,6 +20,8 @@ export default class Fixtures {
       firstName: 'test1',
       lastName: 'test1',
       id: v1(),
+      image: 'https://cdn.iconscout.com/icon/free/png-256/avatar-375-456327.png',
+      number: '+491',
       tokens: [],
     })
   }

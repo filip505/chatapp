@@ -38,11 +38,12 @@ export const server = async (port) => {
   const socket = new Socket()
   await connection.runMigrations()
  
-  for (const entity of config.entities) {
-    const repository = await getRepository(entity.options.name);
-    await repository.query(`DELETE FROM ${entity.options.name};`);
-  }
-  fixtures.init()
+  // for (const entity of config.entities) {
+  //   const repository = await getRepository(entity.options.name);
+  //   await repository.query(`DELETE FROM ${entity.options.name};`);
+  // }
+  // fixtures.init()
+  
   // console.log('is clean', config.entities.length)
   // if (process.env.NODE_ENV === 'test') {
 
@@ -57,6 +58,9 @@ export const server = async (port) => {
   messageController(app, socket.sendMessage)
   authController(app)
   userController(app)
+  app.get('/ping', (req, res)=>{
+    res.send('pong')
+  })
 
   app = http.createServer(app)
   

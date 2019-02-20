@@ -4,41 +4,44 @@ import WS from 'react-native-websocket'
 import { connect } from 'react-redux'
 import { storeMessage } from './action/message.action'
 import { RSA } from 'react-native-rsa-native';
+import { baseSocketURL } from './env'
 
 class Socket extends Component {
 
-  async decryptMessage(encodedMessage, user) {
-    encodedMessage.text = await RSA.decrypt(encodedMessage.text, this.privateKey)
-    storeMessage(encodedMessage, user)
+  async decryptMessage(message) {
+    message.text = await RSA.decrypt(message.text, this.privateKey)
+    storeMessage(message)
   }
-  
+
   async setPrivateKey() {
     this.privateKey = await AsyncStorage.getItem('private_key')
   }
 
+  componentWillMount(){
+    this.setPrivateKey()
+  }
+
   render() {
     const { auth } = this.props
-    this.setPrivateKey()
+    console.log('auth', auth)
     return (
       <View style={{ flex: 1 }}>
-        {/* {auth && <WS
+        {auth.token && <WS
           ref={ref => { this.ws = ref }}
-          url="ws://localhost:1337"
+          url={baseSocketURL}
           onOpen={() => {
             this.ws.send(JSON.stringify({ token: auth.token.id }))
           }}
-          onMessage={(event) => this.decryptMessage(JSON.parse(event.data), auth.user)}
+          onMessage={(event) => this.decryptMessage(JSON.parse(event.data))}
           // onError={(event) => console.log('onError', event)}
           // onClose={(event) => console.log('onClose', event)}
           reconnect // Will try to reconnect onClose
-        />} */}
-
+        />}
         {this.props.children}
       </View>
     )
   }
 }
-
 
 const mapStateToProps = props => {
   return { auth: props.auth }

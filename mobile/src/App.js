@@ -25,13 +25,17 @@ export default class App extends Component {
     this.state = { gateLifted: false }
   }
 
-  async componentWillMount() {
-    this.token = await AsyncStorage.getItem('token')
-    this.MainNavigator = createRootNavigator(this.token);
+  componentWillMount() {
+    //this.token = await AsyncStorage.getItem('token');
+    // console.log('token', this.token)
+    // this.MainNavigator = createRootNavigator(false);
   }
 
-  onBeforeLift = async () => {
-    if (!this.token) {
+  async onBeforeLift() {
+    const token = await AsyncStorage.getItem('token');
+    this.MainNavigator = createRootNavigator(token);
+    if (!token) {
+      console.log('stvaram nove tokene')
       const keys = await RSA.generateKeys(4096)
       await AsyncStorage.setItem('private_key', keys.private)
       await AsyncStorage.setItem('public_key', keys.public)
@@ -39,18 +43,25 @@ export default class App extends Component {
     this.setState({ gateLifted: true })
   }
 
+  renderMainNavigator() {
+    const MainNavigator = this.MainNavigator
+    return <MainNavigator />
+  }
+
   render() {
     const { gateLifted } = this.state
-    const MainNavigator = this.MainNavigator
     return (
+      //<View style={{ flex: 1, backgroundColor: '#f0f' }}><Text>odasdasdask</Text></View>
       <Provider store={store}>
         <PersistGate
-          onBeforeLift={this.onBeforeLift}
+          onBeforeLift={() => this.onBeforeLift()}
           persistor={persistor}>
-          <Socket>
-            {gateLifted && <MainNavigator />}
-            {!gateLifted && <SplashScreen />}
-          </Socket>
+          {gateLifted && (
+            <Socket>
+              {this.renderMainNavigator()}
+            </Socket>
+          )}
+          {!gateLifted && <SplashScreen />}
         </PersistGate>
       </Provider >
     );

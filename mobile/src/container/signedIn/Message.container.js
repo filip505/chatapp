@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { Component } from 'react'
 import { View, Text, FlatList, TextInput } from 'react-native'
-import WS from 'react-native-websocket'
 import { AsyncStorage, StyleSheet, TouchableOpacity } from 'react-native'
-import { getUsers } from './../action/user.action'
 import { connect } from 'react-redux'
-import { sendMessage } from './../action/message.action'
-import BubbleChatItem from '../component/bubble.chat.item';
-import BubbleComponent from '../component/bubble.component';
+import { sendMessage } from '../../action/message.action'
+import BubbleChatItem from '../../component/bubble.chat.item';
+import BubbleComponent from '../../component/bubble.component';
 import { RSA } from 'react-native-rsa-native'
 
 class Dashboard extends Component {
-  static navigationOptions = {
-    title: 'Message',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam('name'),
+    }
   };
 
   constructor(props) {
@@ -30,17 +30,18 @@ class Dashboard extends Component {
     this.state = { token }
   }
 
-  async encriptAndSendMessage(message, user){
+  async encriptAndSendMessage(message, user) {
     const encrypted = await RSA.encrypt(message, user.key)
-    console.log('encrypted')
-    sendMessage(encrypted, user)
+    if (user.key) {
+      sendMessage(encrypted, message, user)
+    }
   }
 
   renderMessage(item) {
     const { auth } = this.props
-    console.log('tu', item.senderId == auth.user.id)
+    console.log(item.senderId + ' '+ auth.user.id, item.senderId == auth.user.id)
     return (
-      <BubbleComponent side={item.senderId == auth.user.id}>
+      <BubbleComponent error={item.error} side={item.senderId == auth.user.id}>
         <BubbleChatItem message={item} />
       </BubbleComponent >
     )
@@ -49,10 +50,9 @@ class Dashboard extends Component {
   render() {
     const { message, user, auth } = this.props
     return (
-      <View style={{ flex: 1, backgroundColor: '#f2f2f2' }}>
+      <View style={{ flex: 1 }}>
         <FlatList style={styles.list}
-          data={message}
-          // renderItem={({ item }) => <BubbleComponent ><BubbleChatItem message={item}/></BubbleComponent>}
+          data={Object.values(message)}
           renderItem={({ item }) => this.renderMessage(item)}
           keyExtractor={(item) => item.id}
         />
@@ -76,9 +76,10 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = function (state, ownProps) {
-  const { error, message, auth, users} = state
+  console.log('mapStateToProps', state.message)
+  const { error, message, auth, users } = state
   const id = ownProps.navigation.getParam('id')
-  return { error, message: message[id] ? message[id].slice() : [], user: users[id], auth }
+  return { error, message: message[id] ? message[id] : {}, user: users[id], auth }
 }
 
 export default connect(mapStateToProps)(Dashboard)
@@ -86,6 +87,7 @@ export default connect(mapStateToProps)(Dashboard)
 const styles = StyleSheet.create({
 
   list: {
+    flex: 1, backgroundColor: '#f2f2f2'
   },
   bottomBar: {
     width: '100%',

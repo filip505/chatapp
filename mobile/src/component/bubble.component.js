@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
-export default ({ children, side}) => {
+export default ({ children, side, error}) => {
   return (
-    <View style={side? styles.left: styles.right}>
+    <View style={[side? styles.left: styles.right, error? styles.error: {}]}>
       {children}
     </View>
   )
@@ -12,6 +12,7 @@ export default ({ children, side}) => {
 const styles = StyleSheet.create({
   right: {
     marginTop: 10,
+    width: '80%',
     marginHorizontal: 10,
     padding: 8,
     alignSelf: 'flex-end' ,
@@ -20,10 +21,15 @@ const styles = StyleSheet.create({
   },
   left: {
     marginTop: 10,
+    width: '80%',
     marginHorizontal: 10,
     padding: 8,
     alignSelf: 'flex-start' ,
     backgroundColor: '#fff',
     borderRadius: 10,
-  }
+  },
+  error: {
+    backgroundColor: '#FF7F7F',
+    alignSelf: 'flex-start'
+  },
 })

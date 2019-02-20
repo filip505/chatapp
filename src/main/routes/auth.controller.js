@@ -3,25 +3,36 @@ import http from 'http-status-codes'
 import { getRepository } from 'typeorm'
 import { dtoValidatorMiddleware as validate } from '../middleware'
 import { signInSchema, loginSchema } from '../dto'
+import AuthService from '../services/auth.service';
 
 export default function (app) {
 
   const personRepository = getRepository('person')
   const tokenRepository = getRepository('token')
+  const authService = new AuthService()
 
   app.post('/login', validate(loginSchema),
-    async (req, res) => {
+    (req, res) => {
       const { password, email, key } = req.body
-      const user = await personRepository.findOne({ email, password })
-      if (user) {
-        const token = await tokenRepository.save({ id: v1(), personId: user.id })
-        user.key = key
-        await personRepository.save({ ...user, key })
-        res.send({ user, token })
+      authService.login(password, email, key).then((response) => {
+        res.send(response)
       }
-      else {
-        res.status(403).send('invalid user or password')
+      ).catch((error) => {
+        console.log('error', error)
+        res.status(error.status).send(error.txt)
       }
+
+      )
+      // const user = await personRepository.findOne({ email, password })
+      // if (user) {
+      //   const token = await tokenRepository.save({ id: v1(), personId: user.id })
+      //   user.key = key
+      //   await personRepository.save({ ...user, key })
+      //   res.send({ user, token })
+      // }
+      // else {
+      //   res.status(403).send('invalid user or password')
+      // }
     })
 
   app.post('/signin',
