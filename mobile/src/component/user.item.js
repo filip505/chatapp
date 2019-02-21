@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 
-export default function ({ user, style, onPress }) {
+export default function ({ user, style, onPress, lastMessage }) {
   console.log('user', user)
   return (
     <TouchableOpacity
@@ -12,9 +12,14 @@ export default function ({ user, style, onPress }) {
         style={styles.image}
         source={{ uri: user.image }}
       />
-      <Text style={styles.text}>
-        {user.firstName}
-      </Text>
+      <View style= {{flexDirection: 'column'}}>
+        <Text style={styles.text}>
+          {user.firstName}
+        </Text>
+        <Text style={styles.text}>
+          {lastMessage}
+        </Text>
+      </View>
     </TouchableOpacity>
   )
 }

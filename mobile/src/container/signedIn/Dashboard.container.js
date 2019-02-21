@@ -17,9 +17,12 @@ class Dashboard extends Component {
     super(props)
   }
 
-  renderUser(user) {
+  renderUser(user, message) {
+    const messages = Object.values(message)
+    const lastMessage = messages[messages.length - 1] ? messages[messages.length - 1].text : 'No messages'
     return (
       <UserItem
+        lastMessage={lastMessage}
         user={user}
         onPress={() => this.props.navigation.navigate('Message', { id: user.id, name: user.firstName })}
         style={{ height: 100, marginHorizontal: 5, marginTop: 5 }} />
@@ -27,34 +30,23 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { users, navigation } = this.props
+    const { users, navigation, message } = this.props
     console.log('message', Object.values(users))
     return (
       <View style={{ flex: 1 }}>
         <FlatList style={styles.list}
           data={Object.values(users).filter((item) => item != "SUCCESS_PHASE")}
-          renderItem={({ item }) => this.renderUser(item)}
+          renderItem={({ item }) => this.renderUser(item, message[item.id] ? message[item.id] : {})}
           keyExtractor={(item) => item.id}
         />
-        {/* {users && Object.values(users).map(value => {
-          return (
-            <TouchableOpacity
-              key={value.id}
-              onPress={() => navigation.navigate('Message', { id: value.id })}
-            >
-              <Text>{value.email}</Text>
-            </TouchableOpacity>
-          )
-        })
-        } */}
       </View>
     )
   }
 }
 
-const mapStateToProps = (props) => {
+const mapStateToProps = ({ users, message }) => {
   return {
-    users: props.users, error: props.error
+    users, message
   }
 }
 
