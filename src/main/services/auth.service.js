@@ -12,9 +12,10 @@ class AuthService {
     const user = await this.personRepository.findOne({ email, password })
     delete user.password;
     if (user) {
-      const token = await this.tokenRepository.save({ id: v1(), personId: user.id })
-      await this.personRepository.save({ ...user, key })
-      return { user, token }
+      const token = await this.tokenRepository.save({ id: v1(), person: user })
+      // const load = await this.tokenRepository.findOne({id: token.id}, { relations: ["person"] })
+      // await this.personRepository.save({ ...user, key })
+      return { user: {...user, token: token.id }}
     }
     else {
       throw { status: 403, body: 'invalid user or password' }

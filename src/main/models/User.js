@@ -1,5 +1,10 @@
-export default {
+import { EntitySchema } from 'typeorm'
+
+export default new EntitySchema({
   name: "person",
+  table: {
+    name: "person"
+  },
   columns: {
     id: {
       primary: true,
@@ -34,7 +39,8 @@ export default {
     tokens: {
       target: 'token',
       type: 'one-to-many',
+      inverseSide: 'person',
       cascade: true
     }
   }
-};
+});

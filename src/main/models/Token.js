@@ -1,5 +1,8 @@
 export default {
   name: "token",
+  table: {
+    name: "token"
+  },
   columns: {
     id: {
       primary: true,
@@ -14,8 +17,8 @@ export default {
     person: {
       target: 'person',
       type: 'many-to-one',
-      joinColumn: true,
-      cascade: true
+      inverseSide: 'tokens',
+      //joinColumn: true
     }
   }
 };

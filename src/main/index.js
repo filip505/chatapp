@@ -26,7 +26,7 @@ const config = {
     "migrationsDir": "migration"
   },
   entities: [
-    new EntitySchema(User),
+    User,
     new EntitySchema(Token),
     new EntitySchema(Message)
   ]
