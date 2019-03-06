@@ -36,7 +36,7 @@ class Dashboard extends Component {
     }
   }
 
-  componentWillReceiveProps(){
+  componentWillReceiveProps() {
     const { messages, user } = this.props
     console.log('messages', messages);
   }
@@ -52,11 +52,13 @@ class Dashboard extends Component {
 
   render() {
     const { messages, user } = this.props
+    console.log('unsorted', messages)
+    console.log('sorted', messages.sort((a, b) => console.log(new Date(b.createdAt) - new Date(a.createdAt))))
     return (
       <View style={{ flex: 1 }}>
         <UserHeader user={user} onPress={() => this.props.navigation.dispatch(resetAction)} />
         <FlatList style={styles.list}
-          data={messages}
+          data={messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))}
           renderItem={({ item }) => this.renderMessage(item)}
           keyExtractor={(item) => item.id}
         />
@@ -83,7 +85,7 @@ const mapStateToProps = function (state, ownProps) {
 
   const userId = ownProps.navigation.getParam('userId')
   const conversationId = ownProps.navigation.getParam('conversationId')
-  
+
   const messages = Object.values(message.messages[conversationId] ? message.messages[conversationId] : {}).sort((msg) => msg.createdAt)
   console.log('messages', messages)
   user = user.users[userId]

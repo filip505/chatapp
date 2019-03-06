@@ -24,7 +24,7 @@ async function call(type, method, config, store) {
   const headers = (config) ? config.headers : {}
   const request = {
     ...config,
-    timeout: 1000,
+    timeout: 10000,
     method,
     baseURL,
     headers: { ...headers, token: await AsyncStorage.getItem('token') }
