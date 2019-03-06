@@ -1,4 +1,4 @@
-import { createStackNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
+import { createStackNavigator, createAppContainer, createSwitchNavigator, StackActions, NavigationActions } from "react-navigation";
 import { LoginContainer, MessageContainer, DashboardContainer, AddContactContainer } from './container';
 
 const SignedIn = createStackNavigator({
@@ -23,6 +23,11 @@ const SignedOut = createStackNavigator({
   // Message: {
   //   screen: MessageContainer
   // }
+});
+
+export const resetAction = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Home' })],
 });
 
 export default createRootNavigator = (signedIn = false) => {

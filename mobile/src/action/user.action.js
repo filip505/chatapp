@@ -1,5 +1,4 @@
-import { get } from './api'
-export const GET_USERS = 'GET_USERS'
-export const GET_USER = 'GET_USER'
+import { get, GET_USER, GET_MESSAGES } from './api'
+import { AsyncStorage } from 'react-native'
 
-export const getUser = (id) => get(GET_USER, `/user/${id}`)
+export const getUser = async (userId) => await get(GET_USER, `/user/${userId}`)

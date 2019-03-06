@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 export default ({ message }) => {
   return (
     <View key={message.id}>
-      <Text>{message.text}</Text>
+      <Text>{message.createdAt}</Text>
     </View>
   )
 }

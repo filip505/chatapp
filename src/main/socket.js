@@ -17,9 +17,9 @@ export default class {
       //   console.log('error', 'faild delivered message to sender id: '+senderId)
       // }
       try {
-        this.connections[msg.recieverId].send(JSON.stringify(msg))
+        this.connections[msg.receiverId].send(JSON.stringify(msg))
       } catch (error) {
-        console.log('error ',  'faild delivered message to sender id: '+recieverId)
+        console.log('error ', 'faild delivered message to sender id: ' + receiverId)
       }
     });
   }

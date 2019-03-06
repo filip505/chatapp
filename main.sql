@@ -1,78 +1,86 @@
-CREATE TABLE migrations
+create table person
 (
-  id        SERIAL  NOT NULL
-    CONSTRAINT "PK_8c82d7f526340ab734260ea46be"
-    PRIMARY KEY,
-  timestamp BIGINT  NOT NULL,
-  name      VARCHAR NOT NULL
-);
+	id uuid default uuid_generate_v4() not null
+		constraint person_pkey
+			primary key,
+	email varchar
+		constraint person_email_key
+			unique,
+	image varchar,
+	number varchar
+		constraint person_number_key
+			unique,
+	key varchar,
+	firstname varchar,
+	lastname varchar,
+	password varchar
+)
+;
 
-CREATE TABLE person
+create table token
 (
-  id        UUID NOT NULL
-    CONSTRAINT person_pkey
-    PRIMARY KEY,
-  email     VARCHAR
-    CONSTRAINT person_email_key
-    UNIQUE,
-  image     VARCHAR,
-  number    VARCHAR
-    CONSTRAINT person_number_key
-    UNIQUE,
-  key       VARCHAR,
-  firstname VARCHAR,
-  lastname  VARCHAR,
-  password  VARCHAR
-);
+	id uuid default uuid_generate_v4() not null
+		constraint token_pkey
+			primary key,
+	"personId" uuid not null
+		constraint "token_personId_fkey"
+			references person
+				on delete cascade
+)
+;
 
-CREATE TABLE token
+create table message
 (
-  id         UUID NOT NULL
-    CONSTRAINT token_pkey
-    PRIMARY KEY,
-  "personId" UUID
-    CONSTRAINT "token_personId_fkey"
-    REFERENCES person
-    ON DELETE CASCADE
-);
+	id uuid default uuid_generate_v4() not null
+		constraint message_pkey
+			primary key,
+	text varchar,
+	"senderId" uuid
+		constraint "message_senderId_fkey"
+			references person
+				on delete cascade,
+	"receiverId" uuid
+		constraint "message_receiverId_fkey"
+			references person
+				on delete cascade,
+	"conversationId" uuid not null,
+	"createdAt" timestamp default now() not null
+)
+;
 
-CREATE TABLE message
+create table conversation
 (
-  id           UUID NOT NULL
-    CONSTRAINT message_pkey
-    PRIMARY KEY,
-  text         VARCHAR,
-  "senderId"   UUID
-    CONSTRAINT "message_senderId_fkey"
-    REFERENCES person
-    ON DELETE CASCADE,
-  "receiverId" UUID
-    CONSTRAINT "message_receiverId_fkey"
-    REFERENCES person
-    ON DELETE CASCADE
-);
+	id uuid default uuid_generate_v4() not null
+		constraint conversation_id_pk
+			primary key,
+	"lastMessageId" uuid,
+	created_at timestamp default now() not null,
+	updated_at timestamp
+)
+;
 
-CREATE TABLE conversation
+alter table message
+	add constraint message_conversation_id_fk
+		foreign key ("conversationId") references conversation
+			on update cascade on delete cascade
+;
+
+create table subject
 (
-  person_1     UUID
-    CONSTRAINT conversation_person_1_pk
-    UNIQUE
-    CONSTRAINT conversation_1__fk
-    REFERENCES person
-    ON UPDATE CASCADE ON DELETE CASCADE,
-  person_2     UUID
-    CONSTRAINT conversation_2__fk
-    REFERENCES person
-    ON UPDATE CASCADE ON DELETE CASCADE,
-  id           UUID NOT NULL
-    CONSTRAINT conversation_id_pk
-    PRIMARY KEY,
-  last_message UUID
-    CONSTRAINT conversation_message_id_fk
-    REFERENCES message
-    ON UPDATE CASCADE ON DELETE SET NULL,
-  created_at   DATE NOT NULL,
-  updated_at   INTEGER,
-  CONSTRAINT conversation_person_1_person_2_pk
-  UNIQUE (person_1, person_2)
-);
+	"personId" uuid not null
+		constraint subject_person_id_fk
+			references person
+				on update cascade on delete cascade,
+	"conversationId" uuid not null
+		constraint subject_conversation_id_fk
+			references conversation
+				on update cascade on delete cascade,
+	"companionId" uuid not null
+		constraint subject_companion_id_fk
+			references person
+				on update cascade on delete cascade,
+	constraint subject_conversation_id_pk
+		primary key ("conversationId", "personId")
+)
+;
+

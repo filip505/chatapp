@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm'
 import { dtoValidatorMiddleware as validate } from '../middleware'
 import { signInSchema, loginSchema } from '../dto'
 import AuthService from '../services/auth.service';
-
+import { errorHandler } from '../util'
 export default function (app) {
 
   const personRepository = getRepository('person')
@@ -18,7 +18,6 @@ export default function (app) {
         res.send(response)
       }
       ).catch((error) => {
-        console.log('error', error)
         res.status(error.status).send(error.txt)
       }
 

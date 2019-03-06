@@ -17,18 +17,34 @@ export default {
     receiverId: {
       name: 'receiverId',
       type: "uuid"
-    }
+    },
+    conversationId: {
+      name: 'conversationId',
+      type: "uuid"
+    },
+    createdAt: {
+      name: 'createdAt',
+      type: 'timestamp'
+    },
   },
   relations: {
-    sender: {
-      target: 'person',
-      type: 'one-to-one',
-      joinColumn: true
+    conversation: {
+      target: 'conversation',
+      type: 'many-to-one',
+      inverseSide: 'messages',
+      //joinColumn: true
     },
-    receiver: {
-      target: 'person',
-      type: 'one-to-one',
-      joinColumn: true
-    }
+   
+   
+    // sender: {
+    //   target: 'person',
+    //   type: 'one-to-one',
+    //   joinColumn: true
+    // },
+    // receiver: {
+    //   target: 'person',
+    //   type: 'one-to-one',
+    //   joinColumn: true
+    // }
   }
 };

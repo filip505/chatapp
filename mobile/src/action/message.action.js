@@ -1,38 +1,33 @@
+import { AsyncStorage } from 'react-native'
+import { RSA } from 'react-native-rsa-native'
 import { dispatch } from './../configureStore'
-import { post } from './api'
+import { post, get, GET_MESSAGES, STORE_MESSAGES, SEND_MESSAGE } from './api'
 
-export const SEND_MESSAGE = 'SEND_MESSAGE'
-export const STORE_MESSAGE = 'STORE_MESSAGE'
 
-export const sendMessage = async (encrypted, text, { id }, callback) => {
-  post(SEND_MESSAGE, '/message', { text: encrypted, recieverId: id }, {}, text)
-  // try {
-  //   console.log('sending', text)
-  //   const token = await AsyncStorage.getItem('token');
-  //   const paylad = await Axios.post('http://192.168.178.53:5001/message', { text, recieverId: id }, {
-  //     headers: {
-  //       token
-  //     }
-  //   })
-  //   console.log('payload', paylad)
-  //   dispatch({
-  //     type: SEND_MESSAGE,
-  //     payload: paylad
-  //   })
-  // } catch (exception) {
-  //   if (callback) setTimeout(callback, 300)
-  //   console.log('exception', exception)
-  //   const { status, data } = exception.response
-  //   dispatch({
-  //     type: 'ERROR',
-  //     payload: { status, data }
-  //   })
-  // }
+export const sendMessage = async (encrypted, text, number, conversationId) => {
+  post(SEND_MESSAGE, '/message', { text: encrypted, number, conversationId }, null, text)
 }
 
-export const storeMessage = (message) => {
+export const getMessages = async (conversationId) => {
+  const res = await get(GET_MESSAGES, `/message/${conversationId}`)
+  const messages = await encryptMessages(res.data)
+  storeMessages(messages, conversationId)
+}
+
+export const encryptMessages = async (messages) => {
+  const privateKey = await AsyncStorage.getItem('private_key')
+  const messagesObject = {}
+  for (let message of messages) {
+    message.text = await RSA.decrypt(message.text, privateKey)
+    messagesObject[message.id] = message
+  }
+  return messagesObject
+}
+
+export const storeMessages = (messages, conversationId) => {
+  console.log('storeMessages')
   dispatch({
-    type: STORE_MESSAGE,
-    payload: {data: message}
+    type: STORE_MESSAGES,
+    payload: { messages, conversationId }
   })
 }

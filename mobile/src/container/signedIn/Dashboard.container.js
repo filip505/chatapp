@@ -3,8 +3,10 @@ import { Component } from 'react'
 import { View, StyleSheet, Text, TouchableOpacity, Button, AsyncStorage } from 'react-native'
 import UserItem from '../../component/user.item'
 import { logout } from '../../action/auth.action'
+import { getConversations } from '../../action/conversation.action'
 import { connect } from 'react-redux'
 import { ForceTouchGestureHandler, FlatList } from 'react-native-gesture-handler';
+import { isLoading, isSuccess } from '../../util/actionPhaseUtil'
 
 class Dashboard extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -17,37 +19,39 @@ class Dashboard extends Component {
     super(props)
   }
 
-  renderUser(user, message) {
-    const messages = Object.values(message)
-    const lastMessage = messages[messages.length - 1] ? messages[messages.length - 1].text : 'No messages'
+  componentWillMount() {
+    getConversations()
+  }
+
+  renderConversation(subject) {
     return (
-      <UserItem
-        lastMessage={lastMessage}
-        user={user}
-        onPress={() => this.props.navigation.navigate('Message', { id: user.id, name: user.firstName })}
-        style={{ height: 100, marginHorizontal: 5, marginTop: 5 }} />
+        <UserItem
+          subject={subject}
+          onPress={()=>this.props.navigation.navigate('Message', {userId: subject.companion.number, conversationId: subject.conversation.id})}
+          style={{ height: 100, marginHorizontal: 5, marginTop: 5 }} />
     )
   }
 
   render() {
-    const { users, navigation, message } = this.props
-    console.log('message', Object.values(users))
+    // const { conversation } = this.props
+    const { phase, subjects } = this.props.conversation
     return (
       <View style={{ flex: 1 }}>
-        <FlatList style={styles.list}
-          data={Object.values(users).filter((item) => item != "SUCCESS_PHASE")}
-          renderItem={({ item }) => this.renderUser(item, message[item.id] ? message[item.id] : {})}
-          keyExtractor={(item) => item.id}
-        />
+        {isLoading(phase) && <Text>Loading</Text>}
+        {isSuccess(phase) &&
+          <FlatList style={styles.list}
+            data={subjects}
+            renderItem={({ item }) => this.renderConversation(item)}
+            keyExtractor={(subject) => subject.conversationId}
+          />
+        }
       </View>
     )
   }
 }
 
-const mapStateToProps = ({ users, message }) => {
-  return {
-    users, message
-  }
+const mapStateToProps = ({ conversation }) => {
+  return { conversation }
 }
 
 const styles = StyleSheet.create({

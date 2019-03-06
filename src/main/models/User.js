@@ -41,6 +41,18 @@ export default new EntitySchema({
       type: 'one-to-many',
       inverseSide: 'person',
       cascade: true
+    },
+    subjects: {
+      target: 'subject',
+      type: 'one-to-many',
+      inverseSide: 'person',
+      cascade: true
+    },
+    companions: {
+      target: 'subject',
+      type: 'one-to-many',
+      inverseSide: 'companion',
+      cascade: true
     }
   }
 });

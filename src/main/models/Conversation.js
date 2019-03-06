@@ -1,42 +1,39 @@
-export default {
-  name: "message",
+import { EntitySchema } from 'typeorm'
+
+export default new EntitySchema({
+  name: "conversation",
   columns: {
     id: {
       generated: "uuid",
       primary: true,
       type: "uuid",
     },
-    person1: {
-      name: 'person_1',
-      type: "varchar"
-    },
-    person2: {
-      name: 'person_@',
-      type: "uuid"
-    },
-    lastMessage: {
-      name: 'created_at',
-      type: "uuid"
+    lastMessageId: {
+      name: 'lastMessageId',
+      type: 'uuid'
     },
     cretedAt: {
-      name: 'person_@',
-      type: "uuid"
+      name: 'created_at',
+      type: "timestamp"
     },
     updatedAt: {
-      name: 'last_message',
-      type: "uuid"
+      name: 'updated_at',
+      type: 'timestamp'
     }
   },
-  // relations: {
-  //   person1: {
-  //     target: 'person',
-  //     type: 'one-to-one',
-  //     joinColumn: true
-  //   },
-  //   person2: {
-  //     target: 'person',
-  //     type: 'one-to-one',
-  //     joinColumn: true
-  //   }
-  // }
-};
+  relations: {
+    messages: {
+      target: 'message',
+      type: 'one-to-many',
+      inverseSide: 'conversation',
+      cascade: true
+      //joinColumn: true
+    },
+    subjects: {
+      target: 'subject',
+      type: 'one-to-many',
+      inverseSide: 'conversation',
+      cascade: true
+    }
+  }
+});

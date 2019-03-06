@@ -1,29 +1,26 @@
-
-import { SEND_MESSAGE, STORE_MESSAGE } from './../action/message.action'
-import { LOGIN, SUCCESS_PHASE, ERROR_PHASE } from '../action/api'
+import { LOADING_PHASE, SUCCESS_PHASE, ERROR_PHASE, SEND_MESSAGE, STORE_MESSAGES, STORE_MESSAGE } from '../action/api'
 import { v1 } from 'uuid'
+
 export default function (state = null, action) {
   switch (action.type) {
-    case STORE_MESSAGE:
-      const obj = action.payload.data
-      const { senderId, id } = obj
-      delete obj.id
-      state[senderId] = state[senderId] ? state[senderId] : {}
-      state[senderId] = { ...state[senderId], [id]: obj }
+    case STORE_MESSAGES: {
+      const { messages, conversationId } = action.payload
+      state.messages[conversationId] = { ...state.messages[conversationId], ...messages }
       return { ...state }
+    }
     case SEND_MESSAGE:
       switch (action.payload.phase) {
-        case LOGIN:
-          break;
+        //case LOADING_PHASE:
+        //break;
         case SUCCESS_PHASE: {
           const obj = action.payload.data
-          const { recieverId, id } = obj
+          const { conversationId, id } = obj
           delete obj.encrypted
-          delete obj.id
+          delete obj.conversationId
           obj.text = action.payload.store
-          state[recieverId] = state[recieverId] ? state[recieverId] : {}
-          state[recieverId] = { ...state[recieverId], [id]: obj }
-          break;
+          state.messages[conversationId] = { ...state.messages[conversationId], [id]: obj }
+          console.log('state', state.messages[conversationId])
+          return { ...state }
         }
         case ERROR_PHASE: {
           const obj = action.payload.data

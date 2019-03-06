@@ -6,8 +6,8 @@ import http from 'http'
 import v1 from 'uuid'
 import { EntitySchema, createConnection, getRepository } from 'typeorm'
 import { authMiddleware, oauthMiddleware } from './middleware'
-import { authController, userController, messageController } from './routes'
-import { User, Token, Message } from './models'
+import { authController, userController, messageController, conversationController } from './routes'
+import { User, Token, Message, Conversation, Subject } from './models'
 import Fixtures from './fixtures'
 import cors from 'cors'
 import Socket from './socket'
@@ -20,13 +20,15 @@ const config = {
   password: "node",
   database: "node",
   synchronize: false,
-  logging: false,
+  logging: true,
   migrations: ["./migration/*.js"],
   cli: {
     "migrationsDir": "migration"
   },
   entities: [
     User,
+    Conversation,
+    Subject,
     new EntitySchema(Token),
     new EntitySchema(Message)
   ]
@@ -36,7 +38,7 @@ export const server = async (port) => {
   const connection = await createConnection(config)
   const fixtures = new Fixtures(connection)
   const socket = new Socket()
-  await connection.runMigrations()
+  //await connection.runMigrations()
  
   // for (const entity of config.entities) {
   //   const repository = await getRepository(entity.options.name);
@@ -58,6 +60,7 @@ export const server = async (port) => {
   messageController(app, socket.sendMessage)
   authController(app)
   userController(app)
+  conversationController(app)
   app.get('/ping', (req, res)=>{
     res.send('pong')
   })
