@@ -1,4 +1,6 @@
-export default {
+import { EntitySchema } from 'typeorm'
+
+export default new EntitySchema({
   name: "message",
   columns: {
     id: {
@@ -34,17 +36,5 @@ export default {
       inverseSide: 'messages',
       //joinColumn: true
     },
-   
-   
-    // sender: {
-    //   target: 'person',
-    //   type: 'one-to-one',
-    //   joinColumn: true
-    // },
-    // receiver: {
-    //   target: 'person',
-    //   type: 'one-to-one',
-    //   joinColumn: true
-    // }
   }
-};
+});

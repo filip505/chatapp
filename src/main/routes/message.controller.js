@@ -1,64 +1,29 @@
-import v1 from 'uuid'
-import http from 'http-status-codes'
-import { getRepository } from 'typeorm'
 import { oauthMiddleware } from './../middleware'
+import { errorHandler } from './../util'
+import messageService from '../services/message.service'
 import { dtoValidatorMiddleware as validate } from '../middleware'
-import { signInSchema, loginSchema } from '../dto'
-import { unpack, errorHandler } from './../util'
-export default function (app, sendMessage) {
+import { Router } from 'express'
+import createMessageShema from '../dto/createMessage'
 
-  const messageRepository = getRepository('message')
-  const conversationRepository = getRepository('conversation')
-  const subjectRepository = getRepository('subject')
-  const personRepository = getRepository('person')
-  const tokenRepository = getRepository('token')
+const router = Router()
 
+router.post('', oauthMiddleware('user'), validate(createMessageShema),
+  errorHandler(async (req, res) => {
+    const { user, body } = req
+    const { conversationId, number, text } = body
+    const message = await messageService.createMessage(conversationId, number, text, user);
+    //sendMessage(message)
+    res.send(message)
+  })
+)
 
-  app.post('/message', oauthMiddleware('user'),
-    errorHandler(async (req, res) => {
-      const { user, body } = req
-      const { conversationId, number, text } = body
-      const date = new Date().format("YYYY-MM-DD HH:mm")
+router.get('/conversation/:conversationId', oauthMiddleware('user'),
+  errorHandler(async (req, res) => {
+    const user = req.user
+    const conversationId = req.params.conversationId
+    const messages = await messageService.getMessages(conversationId, user)
+    res.send(messages)
+  })
+)
 
-      const receiver = await personRepository.findOne({ number })
-      if (!receiver) throw { status: 404, body: 'invalid receiver number' }
-
-      let conversation = await conversationRepository.findOne({ id: conversationId })
-      if (!conversation) throw { status: 404, body: 'invalid conversation id' }
-
-      let message = { receiverId: receiver.id, text, senderId: user.id }
-      message = await messageRepository.save({ ...message, conversation, createdAt: date })
-      console.log('MESSAGELOG',message)
-      conversation.lastMessageId = message.id
-      await conversationRepository.save(conversation)
-
-      delete message.conversation
-      sendMessage(message)
-      res.send(message)
-    })
-  )
-
-  app.get('/message/:conversationId', oauthMiddleware('user'),
-    errorHandler(async (req, res) => {
-      const conversationId = req.params.conversationId
-      const user = req.user
-
-      const subject = await subjectRepository.find({
-        where: {
-          conversationId,
-          person: user
-        },
-      })
-      if (!subject) throw { status: 404, body: 'invalid conversation id' }
-
-      const messages = await messageRepository.find({
-        where: {
-          conversationId,
-          receiverId: user.id
-        }
-      })
-
-      res.send(messages)
-    })
-  )
-}
+export default router

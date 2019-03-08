@@ -5,17 +5,28 @@ export default {
   "type": "object",
   "title": "The Root Schema",
   "required": [
-    "receiverId",
+    "conversationId",
+    "number",
     "text"
   ],
   "properties": {
-    "receiverId": {
-      "$id": "#/properties/receiverId",
+    "conversationId": {
+      "$id": "#/properties/conversationId",
       "type": "string",
-      "title": "The Receiverid Schema",
+      "title": "The Conversationid Schema",
       "default": "",
       "examples": [
-        "0c5bf941-eb04-418d-9354-d78fb9571718"
+        "kkk"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "number": {
+      "$id": "#/properties/number",
+      "type": "string",
+      "title": "The Number Schema",
+      "default": "",
+      "examples": [
+        "kvk"
       ],
       "pattern": "^(.*)$"
     },
@@ -25,10 +36,9 @@ export default {
       "title": "The Text Schema",
       "default": "",
       "examples": [
-        "test"
+        "kk"
       ],
       "pattern": "^(.*)$"
     }
   }
-
 }

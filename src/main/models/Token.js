@@ -1,4 +1,6 @@
-export default {
+import { EntitySchema } from 'typeorm'
+
+export default new EntitySchema({
   name: "token",
   table: {
     name: "token"
@@ -21,4 +23,4 @@ export default {
       //joinColumn: true
     }
   }
-};
+});

@@ -1,48 +1,28 @@
-import v1 from 'uuid'
 import http from 'http-status-codes'
 import { getRepository } from 'typeorm'
 import { dtoValidatorMiddleware as validate } from '../middleware'
 import { signInSchema, loginSchema } from '../dto'
-import AuthService from '../services/auth.service';
+import authService from '../services/auth.service';
 import { errorHandler } from '../util'
-export default function (app) {
+import { Router } from 'express'
 
-  const personRepository = getRepository('person')
-  const tokenRepository = getRepository('token')
-  const authService = new AuthService()
+const router = Router()
 
-  app.post('/login', validate(loginSchema),
-    (req, res) => {
-      const { password, email, key } = req.body
-      authService.login(password, email, key).then((response) => {
-        res.send(response)
-      }
-      ).catch((error) => {
-        res.status(error.status).send(error.txt)
-      }
+router.post('/login', validate(loginSchema),
+  errorHandler(async (req, res) => {
+    const { password, email, key } = req.body
+    const response = await authService.login(password, email, key)
+    res.send(response)
+  }))
 
-      )
-      // const user = await personRepository.findOne({ email, password })
-      // if (user) {
-      //   const token = await tokenRepository.save({ id: v1(), personId: user.id })
-      //   user.key = key
-      //   await personRepository.save({ ...user, key })
-      //   res.send({ user, token })
-      // }
-      // else {
-      //   res.status(403).send('invalid user or password')
-      // }
-    })
+router.post('/signin', validate(signInSchema),
+  errorHandler(async (req, res) => {
+    const user = await authService.signUp(req.body)
+    res.status(http.CREATED).send(user)
+  }))
 
-  app.post('/signin',
-    validate(signInSchema),
-    async (req, res) => {
-      req.body.id = v1()
-      const user = await personRepository.save(req.body)
-      res.status(http.CREATED).send(user)
-    })
+router.get('/ping', (req, res, next) => {
+  res.send('pong')
+})
 
-  app.get('/ping', (req, res) => {
-    res.send('pong')
-  })
-}
+export default router

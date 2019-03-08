@@ -33,6 +33,10 @@ export default new EntitySchema({
     },
     image: {
       type: "varchar"
+    },
+    oneSignalId: {
+      name: 'oneSignalId',
+      type: 'uuid'
     }
   },
   relations: {

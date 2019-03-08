@@ -1,23 +1,12 @@
-import { v1 } from 'uuid'
-import { getRepository } from 'typeorm'
+import userService from '../services/user.service'
+import { Router } from 'express'
+import { errorHandler } from '../util'
 
-export default function (app) {
-  const personRepository = getRepository('person')
+const router = Router()
 
-  app.get('/user', async (req, res) => {
-    const users = await personRepository.find();
-    res.send(users)
-  })
+router.get('/:email', async (req, res) => {
+  const user = await userService.findUserByEmail(req.params.email)
+  res.send(user)
+})
 
-  app.post('/user', (req, res) => {
-    req.body.id = uuid()
-    personRepository.save(req.body)
-    res.send('post')
-  })
-
-  app.get('/user/:email', async (req, res) => {
-    const user = await personRepository.findOne({email: req.params.email})
-    res.send(user)
-  })
-
-};
+export default router
