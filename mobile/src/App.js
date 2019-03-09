@@ -5,8 +5,8 @@ import { Provider } from 'react-redux'
 import Socket from './socket'
 import { persistor, store } from './configureStore'
 import { PersistGate } from 'redux-persist/es/integration/react'
-import { RSA } from 'react-native-rsa-native'
 import OneSignal from 'react-native-onesignal'
+import RSAKey from 'react-native-rsa';
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
 //   android:
@@ -28,7 +28,7 @@ export default class App extends Component {
     OneSignal.addEventListener('received', this.onReceived);
     OneSignal.addEventListener('opened', this.onOpened);
     OneSignal.addEventListener('ids', this.onIds);
-    OneSignal.configure() 
+    OneSignal.configure()
   }
 
   componentWillUnmount() {
@@ -56,10 +56,20 @@ export default class App extends Component {
     const token = await AsyncStorage.getItem('token');
     this.MainNavigator = createRootNavigator(token);
     if (!token) {
-      console.log('stvaram nove tokene')
-      const keys = await RSA.generateKeys(4096)
-      await AsyncStorage.setItem('private_key', keys.private)
-      await AsyncStorage.setItem('public_key', keys.public)
+      var rsa = new RSAKey();
+      rsa.generate(1024, '10001');
+      var publicKey = rsa.getPublicString(); // return json encoded string
+      var privateKey = rsa.getPrivateString();
+      console.log('publicKey', publicKey)
+
+      var originText = 'sample String Value';
+      var encrypted = rsa.encrypt(originText);
+      console.log('encrypted', encrypted)
+      var decrypted = rsa.decrypt(encrypted);
+      console.log('decrypted', decrypted)
+      // const keys = await RSA.generateKeys(4096)
+      // await AsyncStorage.setItem('private_key', keys.private)
+      // await AsyncStorage.setItem('public_key', keys.public)
     }
     this.setState({ gateLifted: true })
   }
