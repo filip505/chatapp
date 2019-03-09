@@ -1,5 +1,4 @@
 import { AsyncStorage } from 'react-native'
-import { RSA } from 'react-native-rsa-native'
 import { dispatch } from './../configureStore'
 import { post, get, GET_MESSAGES, STORE_MESSAGES, SEND_MESSAGE } from './api'
 
@@ -21,7 +20,7 @@ export const encryptMessages = async (messages) => {
   const messagesObject = {}
   for (let message of messages) {
     try {
-      const k = await RSA.decrypt(message.text, privateKey)
+      //const k = await RSA.decrypt(message.text, privateKey)
       console.log('poruke', k)
     } catch (exception) {
       console.log('bljak', exception)

@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { sendMessage, getMessages } from '../../action/message.action'
 import BubbleChatItem from '../../component/bubble.chat.item';
 import BubbleComponent from '../../component/bubble.component';
-import { RSA } from 'react-native-rsa-native'
+// import { RSA } from 'react-native-rsa-native'
 import { getUser } from '../../action/user.action'
 import UserHeader from '../../component/user.header.item'
 import { resetAction } from '../../routes'
@@ -32,7 +32,7 @@ class Dashboard extends Component {
     const { userId, conversationId } = this.props
     console.log(message, user.key)
     try {
-      const encrypted = await RSA.encrypt(message, user.key)
+      // const encrypted = await RSA.encrypt(message, user.key)
       console.log('encrypted', encrypted)
     } catch (exception) {
       console.log('fail')

@@ -3,7 +3,7 @@ import { AppRegistry, View, AsyncStorage } from 'react-native'
 import WS from 'react-native-websocket'
 import { connect } from 'react-redux'
 import { encryptMessages, storeMessages } from './action/message.action'
-import { RSA } from 'react-native-rsa-native';
+// import { RSA } from 'react-native-rsa-native';
 import { baseSocketURL } from './env'
 
 class Socket extends Component {

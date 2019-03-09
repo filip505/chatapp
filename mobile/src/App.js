@@ -66,7 +66,7 @@ export default class App extends Component {
       var encrypted = rsa.encrypt(originText);
       console.log('encrypted', encrypted)
       var decrypted = rsa.decrypt(encrypted);
-      console.log('decrypted', decrypted)
+      console.log('decrypted',decrypted)
       // const keys = await RSA.generateKeys(4096)
       // await AsyncStorage.setItem('private_key', keys.private)
       // await AsyncStorage.setItem('public_key', keys.public)

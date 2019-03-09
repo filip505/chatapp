@@ -145,7 +145,6 @@ android {
 
 dependencies {
     implementation project(':react-native-onesignal')
-    implementation project(':react-native-rsa-native')
     implementation project(':react-native-gesture-handler')
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
