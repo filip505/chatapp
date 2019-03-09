@@ -9,23 +9,31 @@ export const sendMessage = async (encrypted, text, number, conversationId) => {
 }
 
 export const getMessages = async (conversationId) => {
-  const res = await get(GET_MESSAGES, `/message/${conversationId}`)
+  const res = await get(GET_MESSAGES, `/message/conversation/${conversationId}`)
   const messages = await encryptMessages(res.data)
+
   storeMessages(messages, conversationId)
 }
 
 export const encryptMessages = async (messages) => {
+
   const privateKey = await AsyncStorage.getItem('private_key')
   const messagesObject = {}
   for (let message of messages) {
-    message.text = await RSA.decrypt(message.text, privateKey)
+    try {
+      const k = await RSA.decrypt(message.text, privateKey)
+      console.log('poruke', k)
+    } catch (exception) {
+      console.log('bljak', exception)
+    }
+
     messagesObject[message.id] = message
   }
   return messagesObject
 }
 
 export const storeMessages = (messages, conversationId) => {
-  console.log('storeMessages')
+  console.log('storeMessages 2')
   dispatch({
     type: STORE_MESSAGES,
     payload: { messages, conversationId }

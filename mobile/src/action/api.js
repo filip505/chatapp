@@ -15,7 +15,6 @@ export const GET_MESSAGES = 'GET_MESSAGES'
 export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const STORE_MESSAGES = 'STORE_MESSAGES'
 export const STORE_USERS = 'STORE_USERS'
-
 export const DECRYPT_MESSAGES = 'DECRYPT_MESSAGES'
 
 async function call(type, method, config, store) {

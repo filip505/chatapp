@@ -30,10 +30,18 @@ class Dashboard extends Component {
 
   async encriptAndSendMessage(message, user) {
     const { userId, conversationId } = this.props
-    const encrypted = await RSA.encrypt(message, user.key)
-    if (user.key) {
-      sendMessage(encrypted, message, userId, conversationId)
+    console.log(message, user.key)
+    try {
+      const encrypted = await RSA.encrypt(message, user.key)
+      console.log('encrypted', encrypted)
+    } catch (exception) {
+      console.log('fail')
     }
+   
+    // console.log('msg 1')
+    // if (user.key) {
+    //   sendMessage(encrypted, message, userId, conversationId)
+    // }
   }
 
   componentWillReceiveProps() {
@@ -52,8 +60,6 @@ class Dashboard extends Component {
 
   render() {
     const { messages, user } = this.props
-    console.log('unsorted', messages)
-    console.log('sorted', messages.sort((a, b) => console.log(new Date(b.createdAt) - new Date(a.createdAt))))
     return (
       <View style={{ flex: 1 }}>
         <UserHeader user={user} onPress={() => this.props.navigation.dispatch(resetAction)} />

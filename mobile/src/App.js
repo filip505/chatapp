@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, AsyncStorage } from 'react-native';
+import { Text, View, AsyncStorage, Alert } from 'react-native'
 import createRootNavigator from './routes'
 import { Provider } from 'react-redux'
 import Socket from './socket'
 import { persistor, store } from './configureStore'
 import { PersistGate } from 'redux-persist/es/integration/react'
-import { RSA } from 'react-native-rsa-native';
+import { RSA } from 'react-native-rsa-native'
 import OneSignal from 'react-native-onesignal'
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -28,6 +28,7 @@ export default class App extends Component {
     OneSignal.addEventListener('received', this.onReceived);
     OneSignal.addEventListener('opened', this.onOpened);
     OneSignal.addEventListener('ids', this.onIds);
+    OneSignal.configure() 
   }
 
   componentWillUnmount() {
@@ -47,8 +48,8 @@ export default class App extends Component {
     console.log('openResult: ', openResult);
   }
 
-  onIds(device) {
-    console.log('Device info: ', device);
+  async onIds(device) {
+    await AsyncStorage.setItem('oneSignalId', device.userId)
   }
 
   async onBeforeLift() {

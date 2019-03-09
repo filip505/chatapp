@@ -31,8 +31,9 @@ class LoginContainer extends Component {
   loginHandler = async () => {
     const { username, password } = this.state
     const key = await AsyncStorage.getItem('public_key')
+    const oneSignalId = await AsyncStorage.getItem('oneSignalId')
     Keyboard.dismiss()
-    login(username, password, key)
+    login(username, password, key, oneSignalId)
   }
 
   render() {

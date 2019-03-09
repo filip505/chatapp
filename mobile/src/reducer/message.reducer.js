@@ -1,4 +1,4 @@
-import { LOADING_PHASE, SUCCESS_PHASE, ERROR_PHASE, SEND_MESSAGE, STORE_MESSAGES, STORE_MESSAGE } from '../action/api'
+import { LOADING_PHASE, SUCCESS_PHASE, ERROR_PHASE, SEND_MESSAGE, STORE_MESSAGES, GET_MESSAGES } from '../action/api'
 import { v1 } from 'uuid'
 
 export default function (state = null, action) {
@@ -6,6 +6,7 @@ export default function (state = null, action) {
     case STORE_MESSAGES: {
       const { messages, conversationId } = action.payload
       state.messages[conversationId] = { ...state.messages[conversationId], ...messages }
+      console.log('storing')
       return { ...state }
     }
     case SEND_MESSAGE:
