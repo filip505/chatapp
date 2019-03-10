@@ -24,7 +24,6 @@ class Dashboard extends Component {
 
   componentWillMount() {
     getUser(this.props.userId)
-    getMessages(this.props.conversationId)
   }
 
   componentDidMount() {
@@ -41,7 +40,6 @@ class Dashboard extends Component {
       nextAppState === 'active'
     ) {
       getUser(this.props.userId)
-      getMessages(this.props.conversationId)
     }
     this.setState({ appState: nextAppState });
   };
@@ -55,7 +53,6 @@ class Dashboard extends Component {
 
   componentWillReceiveProps() {
     const { messages, user } = this.props
-    console.log('messages', messages);
   }
 
   renderMessage(item) {

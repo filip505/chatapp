@@ -4,13 +4,14 @@ import { dispatch } from './../configureStore'
 export const getConversations = async () => {
   const response = await get(GET_CONVERSATIONS, '/conversation')
   const users = {}
-  for (let subject of response.data) {
-    users[subject.companion.number] = subject.companion
+  for (let conversation of response.data) {
+    users[conversation.companion.number] = conversation.companion
   }
-  dispatch({
-    type: STORE_USERS,
-    payload: { users }
-  })
+  console.log('users', users)
+  // dispatch({
+  //   type: STORE_USERS,
+  //   payload: { users }
+  // })
 }
 
 export const createConversation = async (number, callback) => {

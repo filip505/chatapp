@@ -5,8 +5,14 @@ export default function (state = null, action) {
     case GET_CONVERSATIONS:
       switch (action.payload.phase) {
         case SUCCESS_PHASE:
+          const conversations = {}
+          action.payload.data.forEach(conversation => {
+            conversation.companionId = conversation.companion.number
+            delete conversation.companion
+            conversations[conversation.id] = conversation
+          });
           return {
-            subjects: action.payload.data,
+            conversations,
             phase: action.payload.phase
           }
       }

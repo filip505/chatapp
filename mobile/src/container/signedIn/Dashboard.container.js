@@ -34,36 +34,42 @@ class Dashboard extends Component {
     AppState.removeEventListener('change', () => this._handleAppStateChange);
   }
 
-  _handleAppStateChange(nextAppState){
+  _handleAppStateChange(nextAppState) {
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
       getConversations()
     }
-    this.setState({appState: nextAppState});
+    this.setState({ appState: nextAppState });
   };
 
-  renderConversation(subject) {
+  renderConversation(conversation, user, messages) {
+    console.log('user2', messages)
+    const message = (messages) ? messages[conversation.lastMessageId] : { text: '' }
     return (
-        <UserItem
-          subject={subject}
-          onPress={()=>this.props.navigation.navigate('Message', {userId: subject.companion.number, conversationId: subject.conversation.id})}
-          style={{ height: 100, marginHorizontal: 5, marginTop: 5 }} />
+      <View>
+        {user && <UserItem
+          conversation={conversation}
+          user={user}
+          message={message}
+          onPress={() => this.props.navigation.navigate('Message', { userId: user.number, conversationId: conversation.id })}
+          style={{ height: 100, marginHorizontal: 5, marginTop: 5 }} />}
+      </View>
     )
   }
 
   render() {
-    // const { conversation } = this.props
-    const { phase, subjects } = this.props.conversation
+    const { conversation, user, message } = this.props
+    const { phase, conversations } = conversation
     return (
       <View style={{ flex: 1 }}>
         {isLoading(phase) && <Text>Loading</Text>}
         {isSuccess(phase) &&
           <FlatList style={styles.list}
-            data={subjects}
-            renderItem={({ item }) => this.renderConversation(item)}
-            keyExtractor={(subject) => subject.conversationId}
+            data={Object.values(conversations)}
+            renderItem={({ item }) => this.renderConversation(item, user.users[item.companionId], message.messages[item.id])}
+            keyExtractor={(conversation) => conversation.id}
           />
         }
       </View>
@@ -71,8 +77,8 @@ class Dashboard extends Component {
   }
 }
 
-const mapStateToProps = ({ conversation }) => {
-  return { conversation }
+const mapStateToProps = ({ conversation, user, message }) => {
+  return { conversation, user, message }
 }
 
 const styles = StyleSheet.create({

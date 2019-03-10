@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 
-export default function ({ subject, style, onPress }) {
-  const { companion, conversation } = subject
+export default function ({ conversation, style, onPress, user, message }) {
+  console.log('message', message)
   return (
     <TouchableOpacity
       style={[style, styles.container]}
@@ -10,14 +10,17 @@ export default function ({ subject, style, onPress }) {
     >
       <Image
         style={styles.image}
-        source={{ uri: companion.image }}
+        source={{ uri: user.image }}
       />
       <View style={{ flexDirection: 'column' }}>
         <Text style={styles.text}>
-          {companion.firstName}
+          {user.firstName}
         </Text>
         <Text style={styles.text}>
           {conversation.updated_at}
+        </Text>
+        <Text style={styles.text}>
+          {message.text}
         </Text>
       </View>
     </TouchableOpacity>
