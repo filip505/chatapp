@@ -27,7 +27,6 @@ export const encryptMessages = async (messages) => {
 }
 
 export const storeMessages = (messages, conversationId) => {
-  console.log('storeMessages 2')
   dispatch({
     type: STORE_MESSAGES,
     payload: { messages, conversationId }

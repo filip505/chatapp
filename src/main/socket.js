@@ -2,27 +2,11 @@ import { server as WebSocketServer } from 'websocket'
 import { getRepository } from 'typeorm'
 import http from 'http'
 
-export default class {
+class Socket {
 
   userRepository = getRepository('person')
   tokenRepository = getRepository('token')
   connection = null
-
-  sendMessage = (msg) => {
-    return new Promise((resolve, reject) => {
-      //console.log('msg', msg)
-      // try {
-      //   this.connections[msg.senderId].send(JSON.stringify(msg))
-      // } catch (error) {
-      //   console.log('error', 'faild delivered message to sender id: '+senderId)
-      // }
-      try {
-        this.connections[msg.receiverId].send(JSON.stringify(msg))
-      } catch (error) {
-        console.log('error ', 'faild delivered message to sender id: ' + receiverId)
-      }
-    });
-  }
 
   constructor() {
     this.connections = {}
@@ -39,19 +23,21 @@ export default class {
     wsServer.on('request', (request) => {
       var connection = request.accept(null, request.origin);
 
-      // This is the most important callback for us, we'll handle
-      // all messages from users here.
       connection.on('message', async (message) => {
         if (message.type === 'utf8') {
           try {
             const msg = JSON.parse(message.utf8Data)
             const token = await this.tokenRepository.findOne({ id: msg.token })
-            this.connections[token.personId] = connection
-
-            for (let key in this.connections) {
-              console.log(key)
+            switch (msg.type) {
+              case 'CONNECT':
+                this.connections[token.personId] = connection
+                break
+              case 'DISCONNECT':
+                console.log('prije', this.connections[token.personId])
+                delete this.connections[token.personId]
+                console.log('poslije', this.connections[token.personId])
+                break
             }
-
           } catch (error) {
             console.log('error', connection)
             connection.send(JSON.stringify({ error: 'invalid token' }))
@@ -59,10 +45,18 @@ export default class {
           }
         }
       });
-      connection.on('close', function (connection) {
+      connection.on('close', function (connection, bla, fllff) {
         console.log('connection closed')
       });
     })
+
   }
 
+  sendMessage = (msg) => new Promise((resolve, reject) => {
+    console.log('this.connections[msg.receiverId]', this.connections[msg.receiverId])
+    this.connections[msg.receiverId].send(JSON.stringify(msg))
+  });
+
 }
+
+export default new Socket()

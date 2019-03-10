@@ -4,8 +4,8 @@ import { errorHandler } from '../util'
 
 const router = Router()
 
-router.get('/:email', async (req, res) => {
-  const user = await userService.findUserByEmail(req.params.email)
+router.get('/:number', async (req, res) => {
+  const user = await userService.findUserByNumber(req.params.number)
   res.send(user)
 })
 

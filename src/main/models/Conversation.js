@@ -10,11 +10,13 @@ export default new EntitySchema({
     },
     lastMessageId: {
       name: 'lastMessageId',
-      type: 'uuid'
+      type: 'uuid',
+      nullable: true
     },
     cretedAt: {
       name: 'created_at',
-      type: "timestamp"
+      type: 'timestamp',
+      default: 'now()'
     },
     updatedAt: {
       name: 'updated_at',

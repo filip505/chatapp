@@ -14,6 +14,7 @@ export default function (state = null, action) {
       return { ...state, users: { ...state.users, [user.number]: user } }
     case STORE_USERS:
       const { users } = action.payload
+      console.log('tu', action.payload)
       return { ...state, users: { ...state.users, ...users } }
     case GET_USER:
       const phase = action.payload.phase

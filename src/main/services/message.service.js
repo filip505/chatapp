@@ -19,9 +19,9 @@ class MessageService{
     message = await this.messageRepository.save({ ...message, conversation, createdAt: date })
    
     conversation.lastMessageId = message.id
+    conversation.companionId = user.number
     await this.conversationRepository.save(conversation)
-
-    delete message.conversation
+  
     return message;
   }
 

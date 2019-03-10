@@ -10,8 +10,8 @@ const router = Router()
 
 router.post('/login', validate(loginSchema),
   errorHandler(async (req, res) => {
-    const { password, email, key } = req.body
-    const response = await authService.login(password, email, key)
+    const { password, email, key, oneSignalId } = req.body
+    const response = await authService.login(password, email, key, oneSignalId)
     res.send(response)
   }))
 

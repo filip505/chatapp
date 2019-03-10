@@ -3,6 +3,7 @@ import { View, AsyncStorage, AppState } from 'react-native'
 import { connect } from 'react-redux'
 import { encryptMessages, storeMessages } from './action/message.action'
 import { baseSocketURL } from './env'
+import { storeConversation, getConversations } from './action/conversation.action';
 
 class Socket extends Component {
 
@@ -35,7 +36,7 @@ class Socket extends Component {
     }
   }
 
-  _handleAppStateChange(nextAppState){
+  _handleAppStateChange(nextAppState) {
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       this.connect()
     }
@@ -58,9 +59,7 @@ class Socket extends Component {
     const token = await AsyncStorage.getItem('token')
     console.log('CONNECTIONG')
     this.ws = new WebSocket(baseSocketURL)
-    this.ws.onopen = () => {
-      this.send(JSON.stringify({ token, type: 'CONNECT' }))
-    }
+    this.ws.onopen = () => { this.send(JSON.stringify({ token, type: 'CONNECT' })) }
     this.ws.onmessage = (event) => { this.decryptMessage(JSON.parse(event.data)) }
     this.ws.onerror = (error) => { }
     this.ws.onclose = () => {
@@ -72,10 +71,16 @@ class Socket extends Component {
   }
 
   async decryptMessage(message) {
-    console.log('recived message', message)
     const { conversationId } = message
+    const { conversations } = this.props.conversation
+    const conversation = conversations[conversationId]
+    if(conversation) conversation.lastMessageId = message.id
     const messages = await encryptMessages([message])
     storeMessages(messages, conversationId)
+    if(!conversations[message.conversationId]) {
+      getConversations()
+    }
+    //storeConversation(message.conversation)
   }
 
   async setPrivateKey() {
@@ -95,7 +100,7 @@ class Socket extends Component {
   }
 }
 
-const mapStateToProps = props => {
-  return { auth: props.auth }
+const mapStateToProps = ({ auth, conversation }) => {
+  return { auth, conversation }
 }
 export default connect(mapStateToProps)(Socket)

@@ -16,6 +16,7 @@ export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const STORE_MESSAGES = 'STORE_MESSAGES'
 export const STORE_USERS = 'STORE_USERS'
 export const DECRYPT_MESSAGES = 'DECRYPT_MESSAGES'
+export const STORE_CONVERSATION = 'STORE_CONVERSATION'
 
 async function call(type, method, config, store) {
   console.log('request made', type)

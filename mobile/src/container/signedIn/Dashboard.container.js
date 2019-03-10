@@ -45,7 +45,6 @@ class Dashboard extends Component {
   };
 
   renderConversation(conversation, user, messages) {
-    console.log('user2', messages)
     const message = (messages) ? messages[conversation.lastMessageId] : { text: '' }
     return (
       <View>

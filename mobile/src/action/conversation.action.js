@@ -1,17 +1,18 @@
-import { get, post, GET_CONVERSATIONS, CREATE_CONVERSATION, STORE_USER, STORE_USERS } from './api'
+import { get, post, GET_CONVERSATIONS, CREATE_CONVERSATION, STORE_CONVERSATION, STORE_USER, STORE_USERS } from './api'
 import { dispatch } from './../configureStore'
 
 export const getConversations = async () => {
   const response = await get(GET_CONVERSATIONS, '/conversation')
   const users = {}
+  console.log('response', response)
   for (let conversation of response.data) {
     users[conversation.companion.number] = conversation.companion
   }
-  console.log('users', users)
-  // dispatch({
-  //   type: STORE_USERS,
-  //   payload: { users }
-  // })
+  console.log('response', users)
+  dispatch({
+    type: STORE_USERS,
+    payload: { users }
+  })
 }
 
 export const createConversation = async (number, callback) => {
@@ -21,4 +22,11 @@ export const createConversation = async (number, callback) => {
     payload: { user: response.data.companion }
   })
   callback(response.data.id, response.data.companion.id)
+}
+
+export const storeConversation = async (conversation) => {
+  dispatch({
+    type: STORE_CONVERSATION,
+    payload: conversation
+  })
 }

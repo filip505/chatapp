@@ -19,7 +19,6 @@ class AddContact extends Component {
 
   conversationCreatedHandler(conversationId) {
     if (!this._calledComponentWillUnmount) {
-      console.log(this.state, 'props')
       this.props.navigation.navigate('Message', { userId: this.state.number, conversationId })
     }
   }
