@@ -65,7 +65,7 @@ class Socket extends Component {
     this.ws.onclose = () => {
       this.connected = false
       if (this.reconnect) {
-        setTimeout(this._handleWebSocketSetup, 3000)
+        setTimeout(()=>this.connect(), 50000)
       }
     }
   }
