@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Component } from 'react'
-import { View, StyleSheet, Text, TouchableOpacity, Button, AsyncStorage } from 'react-native'
+import { View, StyleSheet, Text, Button, AppState } from 'react-native'
 import UserItem from '../../component/user.item'
 import { logout } from '../../action/auth.action'
 import { getConversations } from '../../action/conversation.action'
@@ -17,11 +17,32 @@ class Dashboard extends Component {
 
   constructor(props) {
     super(props)
+    state = {
+      appState: AppState.currentState,
+    };
   }
 
   componentWillMount() {
     getConversations()
   }
+
+  componentDidMount() {
+    AppState.addEventListener('change', () => this._handleAppStateChange);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', () => this._handleAppStateChange);
+  }
+
+  _handleAppStateChange(nextAppState){
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      getConversations()
+    }
+    this.setState({appState: nextAppState});
+  };
 
   renderConversation(subject) {
     return (

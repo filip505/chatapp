@@ -36,7 +36,6 @@ class Socket extends Component {
   }
 
   _handleAppStateChange(nextAppState){
-    console.log('STATE', this.state.appState)
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       this.connect()
     }
