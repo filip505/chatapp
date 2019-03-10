@@ -1,12 +1,11 @@
 import * as React from 'react'
 import { Component } from 'react'
-import { View, Text, FlatList, TextInput } from 'react-native'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, TextInput, AppState, StyleSheet, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { sendMessage, getMessages } from '../../action/message.action'
 import BubbleChatItem from '../../component/bubble.chat.item';
 import BubbleComponent from '../../component/bubble.component';
-// import { RSA } from 'react-native-rsa-native'
+import RSAKey from 'react-native-rsa'
 import { getUser } from '../../action/user.action'
 import UserHeader from '../../component/user.header.item'
 import { resetAction } from '../../routes'
@@ -19,29 +18,39 @@ class Dashboard extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { text: '' }
+    this.state = { text: '', appState: AppState.currentState }
+    this.RSAKey = new RSAKey()
   }
 
   componentWillMount() {
-    const { userId, conversationId } = this.props
-    getUser(userId)
-    getMessages(conversationId)
+    getUser(this.props.userId)
+    getMessages(this.props.conversationId)
   }
+
+  componentDidMount() {
+    AppState.addEventListener('change', this._handleAppStateChange);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = (nextAppState) => {
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      getUser(this.props.userId)
+      getMessages(this.props.conversationId)
+    }
+    this.setState({ appState: nextAppState });
+  };
 
   async encriptAndSendMessage(message, user) {
     const { userId, conversationId } = this.props
-    console.log(message, user.key)
-    try {
-      // const encrypted = await RSA.encrypt(message, user.key)
-      console.log('encrypted', encrypted)
-    } catch (exception) {
-      console.log('fail')
-    }
-   
-    // console.log('msg 1')
-    // if (user.key) {
-    //   sendMessage(encrypted, message, userId, conversationId)
-    // }
+    this.RSAKey.setPublicString(user.key)
+    var encrypted = this.RSAKey.encrypt(message);
+    sendMessage(encrypted, message, userId, conversationId)
   }
 
   componentWillReceiveProps() {

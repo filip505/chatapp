@@ -56,20 +56,10 @@ export default class App extends Component {
     const token = await AsyncStorage.getItem('token');
     this.MainNavigator = createRootNavigator(token);
     if (!token) {
-      var rsa = new RSAKey();
+      const rsa = new RSAKey();
       rsa.generate(1024, '10001');
-      var publicKey = rsa.getPublicString(); // return json encoded string
-      var privateKey = rsa.getPrivateString();
-      console.log('publicKey', publicKey)
-
-      var originText = 'sample String Value';
-      var encrypted = rsa.encrypt(originText);
-      console.log('encrypted', encrypted)
-      var decrypted = rsa.decrypt(encrypted);
-      console.log('decrypted',decrypted)
-      // const keys = await RSA.generateKeys(4096)
-      // await AsyncStorage.setItem('private_key', keys.private)
-      // await AsyncStorage.setItem('public_key', keys.public)
+      await AsyncStorage.setItem('private_key', rsa.getPrivateString())
+      await AsyncStorage.setItem('public_key', rsa.getPublicString())
     }
     this.setState({ gateLifted: true })
   }

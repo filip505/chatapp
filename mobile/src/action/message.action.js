@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native'
 import { dispatch } from './../configureStore'
 import { post, get, GET_MESSAGES, STORE_MESSAGES, SEND_MESSAGE } from './api'
-
+import RSAKey from 'react-native-rsa'
 
 export const sendMessage = async (encrypted, text, number, conversationId) => {
   post(SEND_MESSAGE, '/message', { text: encrypted, number, conversationId }, null, text)
@@ -15,17 +15,12 @@ export const getMessages = async (conversationId) => {
 }
 
 export const encryptMessages = async (messages) => {
-
   const privateKey = await AsyncStorage.getItem('private_key')
+  const rsa = new RSAKey()
+  rsa.setPrivateString(privateKey)
   const messagesObject = {}
   for (let message of messages) {
-    try {
-      //const k = await RSA.decrypt(message.text, privateKey)
-      console.log('poruke', k)
-    } catch (exception) {
-      console.log('bljak', exception)
-    }
-
+    message.text = rsa.decrypt(message.text, privateKey)
     messagesObject[message.id] = message
   }
   return messagesObject
