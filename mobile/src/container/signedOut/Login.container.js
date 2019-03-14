@@ -5,8 +5,7 @@ import SpinnerHocComponent from '../../component/spinner.hoc';
 import DismissKeyboardHoc from '../../component/dismissKeyboard.hoc'
 import { connect } from 'react-redux'
 import { login } from './../../action/auth.action'
-import { createLoadingSelector } from './../../util/selectors'
-import { isLoading, isSuccess, isError } from '../../util/actionPhaseUtil'
+import { createLoadingSelector, createErrorMessageSelector } from './../../util/selectors'
 
 class LoginContainer extends Component {
   static navigationOptions = {
@@ -23,9 +22,9 @@ class LoginContainer extends Component {
   }
 
   componentWillReceiveProps(props) {
-    if (isSuccess(props.auth.phase)) {
-      props.navigation.navigate('SignedIn')
-    }
+    // if (isSuccess(props.auth.phase)) {
+    //   props.navigation.navigate('SignedIn')
+    // }
   }
 
   loginHandler = async () => {
@@ -37,12 +36,12 @@ class LoginContainer extends Component {
   }
 
   render() {
-    const { username, password, isFetching, auth } = this.props
+    const { username, password, isFetching, auth, isError } = this.props
     return (
-      <SpinnerHocComponent
-        spinner={isLoading(auth.phase)}
-        style={styles.container}
-      >
+      // <SpinnerHocComponent
+      //   spinner={isLoading(auth.phase)}
+      //   style={styles.container}
+      // >
         <DismissKeyboardHoc>
           <View style={styles.container}>
             <TextInput
@@ -64,16 +63,17 @@ class LoginContainer extends Component {
             >
               <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}> {(isFetching) ? 'LOADING' : 'LOGIN'} </Text>
             </TouchableOpacity>
-            {isError(auth.phase) && <Text> Error </Text>}
+            {(isError) && <Text> Error </Text>}
           </View>
         </DismissKeyboardHoc>
-      </SpinnerHocComponent>
+      //</SpinnerHocComponent>
     )
   }
 }
 const loadingSelector = createLoadingSelector(['LOGIN']);
+const errorSelector = createErrorMessageSelector(['LOGIN']);
 
-const mapStateToProps = (state) => ({ auth: state.auth, isFetching: loadingSelector(state) })
+const mapStateToProps = (state) => ({ auth: state.auth, isFetching: loadingSelector(state), isError: errorSelector(state) })
 
 export default connect(mapStateToProps)(LoginContainer)
 

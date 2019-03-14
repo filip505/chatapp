@@ -30,7 +30,6 @@ async function call(type, method, config, store) {
   }
   try {
     let payload = await Axios.request(request)
-    payload.phase = SUCCESS_PHASE
     payload.store = store
     dispatch({
       type: type + '_SUCCESS',
@@ -38,11 +37,17 @@ async function call(type, method, config, store) {
     })
     return payload
   } catch (exception) {
+    console.log('_FAILURE', exception.response)
     dispatch({
       type: type + '_FAILURE',
-      payload: { phase: ERROR_PHASE, data: request.data, store }
+      //payload: { phase: ERROR_PHASE, data: request.data, store }
+      payload: exception.response
     })
   }
+}
+
+export function clearErrors(){
+  
 }
 
 export const get = async (type, url, headers, store) => await call(type, 'get', { url, headers }, store)
