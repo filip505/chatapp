@@ -44,7 +44,6 @@ class AddContact extends Component {
 }
 
 const mapStateToProps = ({ user, conversation }) => {
-  console.log('mapStateToProps', conversation.conversation)
   return { users: user.users, conversation: conversation.conversation }
 }
 

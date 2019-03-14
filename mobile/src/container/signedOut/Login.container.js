@@ -5,7 +5,7 @@ import SpinnerHocComponent from '../../component/spinner.hoc';
 import DismissKeyboardHoc from '../../component/dismissKeyboard.hoc'
 import { connect } from 'react-redux'
 import { login } from './../../action/auth.action'
-
+import { createLoadingSelector } from './../../util/selectors'
 import { isLoading, isSuccess, isError } from '../../util/actionPhaseUtil'
 
 class LoginContainer extends Component {
@@ -37,7 +37,7 @@ class LoginContainer extends Component {
   }
 
   render() {
-    const { username, password, auth } = this.props
+    const { username, password, isFetching, auth } = this.props
     return (
       <SpinnerHocComponent
         spinner={isLoading(auth.phase)}
@@ -62,7 +62,7 @@ class LoginContainer extends Component {
             <TouchableOpacity style={[styles.button]}
               onPress={this.loginHandler}
             >
-              <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}> LOGIN </Text>
+              <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}> {(isFetching) ? 'LOADING' : 'LOGIN'} </Text>
             </TouchableOpacity>
             {isError(auth.phase) && <Text> Error </Text>}
           </View>
@@ -71,10 +71,9 @@ class LoginContainer extends Component {
     )
   }
 }
+const loadingSelector = createLoadingSelector(['LOGIN']);
 
-const mapStateToProps = function (state, ownProps) {
-  return { auth: state.auth }
-}
+const mapStateToProps = (state) => ({ auth: state.auth, isFetching: loadingSelector(state) })
 
 export default connect(mapStateToProps)(LoginContainer)
 

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { View, AsyncStorage, AppState } from 'react-native'
 import { connect } from 'react-redux'
-import { encryptMessages, storeMessages } from './action/message.action'
 import { baseSocketURL } from './env'
-import { storeConversation, getConversations } from './action/conversation.action';
+import { decryptMessages, storeMessages } from './action/message.action'
+import { getConversations, storeConversation } from './action/conversation.action';
 
 class Socket extends Component {
 
@@ -11,7 +11,7 @@ class Socket extends Component {
     super(props)
     this.reconnect = true
     this.state = {
-      appState: AppState.currentState
+      appState: AppState.currentState,
     }
   }
 
@@ -60,27 +60,34 @@ class Socket extends Component {
     console.log('CONNECTIONG')
     this.ws = new WebSocket(baseSocketURL)
     this.ws.onopen = () => { this.send(JSON.stringify({ token, type: 'CONNECT' })) }
-    this.ws.onmessage = (event) => { this.decryptMessage(JSON.parse(event.data)) }
+    this.ws.onmessage = (event) => this.onMessage(JSON.parse(event.data))
     this.ws.onerror = (error) => { }
     this.ws.onclose = () => {
       this.connected = false
       if (this.reconnect) {
-        setTimeout(()=>this.connect(), 50000)
+        setTimeout(() => this.connect(), 50000)
       }
     }
   }
 
-  async decryptMessage(message) {
+  async onMessage(message) {
+    const { conversations } = this.props
     const { conversationId } = message
-    const { conversations } = this.props.conversation
-    const conversation = conversations[conversationId]
-    if(conversation) conversation.lastMessageId = message.id
-    const messages = await encryptMessages([message])
-    storeMessages(messages, conversationId)
-    if(!conversations[message.conversationId]) {
+    console.log('message',conversationId)
+    const messages = await decryptMessages([message])
+
+    if (this.props.currentScreen == 'Message') {
+      storeMessages(messages, conversationId)
+    }
+
+
+    if (conversations[conversationId]) {
+      console.log('storeConversation1', conversations[conversationId])
+      storeConversation({...conversations[conversationId], lastMessageId: message.id})
+    } else {
+      console.log('storeConversation2', conversations[conversationId])
       getConversations()
     }
-    //storeConversation(message.conversation)
   }
 
   async setPrivateKey() {
@@ -101,6 +108,6 @@ class Socket extends Component {
 }
 
 const mapStateToProps = ({ auth, conversation }) => {
-  return { auth, conversation }
+  return { auth, conversations: conversation.conversations }
 }
 export default connect(mapStateToProps)(Socket)

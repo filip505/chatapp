@@ -10,10 +10,7 @@ export default function (state = null, action) {
             conversation.companionId = conversation.companion.number
             conversations[conversation.id] = conversation
           });
-          return {
-            conversations,
-            phase: action.payload.phase
-          }
+          return { ...conversations }
       }
       return { ...state, phase: action.payload.phase }
     case CREATE_CONVERSATION:
@@ -22,10 +19,8 @@ export default function (state = null, action) {
           return { ...state, phase: action.payload.phase, conversation: action.payload.data }
       }
     case STORE_CONVERSATION:
-      const conversations = state.conversations
       const conversation = action.payload
-      state.conversations[conversation.id] = conversation
-      return { ...state }
+      return { ...state, [conversation.id]: conversation }
     default:
       return state
   }

@@ -2,7 +2,6 @@ import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 
 export default function ({ conversation, style, onPress, user, message }) {
-  console.log('message', message)
   return (
     <TouchableOpacity
       style={[style, styles.container]}

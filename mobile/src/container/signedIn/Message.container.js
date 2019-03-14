@@ -68,7 +68,7 @@ class Dashboard extends Component {
     const { messages, user } = this.props
     return (
       <View style={{ flex: 1 }}>
-        <UserHeader user={user} onPress={() => this.props.navigation.dispatch(resetAction)} />
+        <UserHeader user={user} onPress={() => this.props.navigation.goBack()} />
         <FlatList style={styles.list}
           data={messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))}
           renderItem={({ item }) => this.renderMessage(item)}
@@ -93,15 +93,15 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = function (state, ownProps) {
-  let { message, user } = state
+  const { message, user } = state
+  const { getParam } = ownProps.navigation
 
-  const userId = ownProps.navigation.getParam('userId')
-  const conversationId = ownProps.navigation.getParam('conversationId')
+  const userId = getParam('userId')
+  const conversationId = getParam('conversationId')
 
-  const messages = Object.values(message.messages[conversationId] ? message.messages[conversationId] : {}).sort((msg) => msg.createdAt)
-  console.log('messages', messages)
-  user = user.users[userId]
-  return { messages, user, conversationId, userId }
+  const messages = Object.values(message[conversationId] ? message[conversationId] : {}).sort((msg) => msg.createdAt)
+ 
+  return { messages, user: user[userId], conversationId, userId }
 }
 
 export default connect(mapStateToProps)(Dashboard)

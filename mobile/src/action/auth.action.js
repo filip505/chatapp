@@ -1,9 +1,8 @@
 import Axios from 'axios'
-import { dispatch } from './../configureStore'
+import { dispatch } from '../store'
 import { post, LOGIN } from './api'
 
 export const login = (email, password, key, oneSignalId) => {
-  console.log('bla', oneSignalId)
   post(LOGIN, '/auth/login', { email, password, key, oneSignalId})
 }
 

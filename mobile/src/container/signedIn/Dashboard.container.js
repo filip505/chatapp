@@ -45,7 +45,11 @@ class Dashboard extends Component {
   };
 
   renderConversation(conversation, user, messages) {
-    const message = (messages) ? messages[conversation.lastMessageId] : { text: '' }
+    let message = { text: 'New Message' }
+    if (messages) {
+      message = (messages[conversation.lastMessageId]) ? messages[conversation.lastMessageId] : { text: 'New Message' }
+    }
+
     return (
       <View>
         {user && <UserItem
@@ -59,18 +63,17 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { conversation, user, message } = this.props
-    const { phase, conversations } = conversation
+    const { user, message, conversation } = this.props
+    console.log('conversation', conversation)
     return (
       <View style={{ flex: 1 }}>
-        {isLoading(phase) && <Text>Loading</Text>}
-        {isSuccess(phase) &&
-          <FlatList style={styles.list}
-            data={Object.values(conversations)}
-            renderItem={({ item }) => this.renderConversation(item, user.users[item.companionId], message.messages[item.id])}
-            keyExtractor={(conversation) => conversation.id}
-          />
-        }
+
+        <FlatList style={styles.list}
+          data={Object.values(conversation).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))}
+          renderItem={({ item }) => this.renderConversation(item, user[item.companionId], message.messages[item.id])}
+          keyExtractor={(conversation) => conversation.id}
+        />
+
       </View>
     )
   }

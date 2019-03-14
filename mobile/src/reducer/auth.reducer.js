@@ -7,9 +7,7 @@ export default function (state = null, action) {
             switch (action.payload.phase) {
                 case SUCCESS_PHASE:
                     const state = action.payload.data
-                    AsyncStorage.setItem('token', state.token);
-                    console.log('token', state)
-                    
+                    AsyncStorage.setItem('token', state.token);    
                     return {...state, phase: action.payload.phase}
             }
             return state

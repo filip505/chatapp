@@ -6,13 +6,10 @@ export default function (state = null, action) {
     case STORE_MESSAGES: {
       const { messages, conversationId } = action.payload
       state.messages[conversationId] = { ...state.messages[conversationId], ...messages }
-      console.log('storing')
       return { ...state }
     }
     case SEND_MESSAGE:
       switch (action.payload.phase) {
-        //case LOADING_PHASE:
-        //break;
         case SUCCESS_PHASE: {
           const obj = action.payload.data
           const { conversationId, id } = obj
@@ -20,20 +17,21 @@ export default function (state = null, action) {
           delete obj.conversationId
           obj.text = action.payload.store
           state.messages[conversationId] = { ...state.messages[conversationId], [id]: obj }
-          console.log('state', state.messages[conversationId])
           return { ...state }
         }
-        case ERROR_PHASE: {
-          const obj = action.payload.data
-          const { recieverId } = obj
-          const id = v1()
-          delete obj.encrypted
-          obj.error = true
-          obj.text = action.payload.store
-          state[recieverId] = state[recieverId] ? state[recieverId] : {}
-          state[recieverId] = { ...state[recieverId], [id]: obj }
-          break;
-        }
+          //case LOADING_PHASE:
+        //break;
+        // case ERROR_PHASE: {
+        //   const obj = action.payload.data
+        //   const { recieverId } = obj
+        //   const id = v1()
+        //   delete obj.encrypted
+        //   obj.error = true
+        //   obj.text = action.payload.store
+        //   state[recieverId] = state[recieverId] ? state[recieverId] : {}
+        //   state[recieverId] = { ...state[recieverId], [id]: obj }
+        //   break;
+        // }
       }
       return { ...state }
     default:

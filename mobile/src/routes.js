@@ -1,5 +1,6 @@
-import { createStackNavigator, createAppContainer, createSwitchNavigator, StackActions, NavigationActions } from "react-navigation";
+import { createStackNavigator, createAppContainer, createSwitchNavigator, StackActions, NavigationActions, startSingleScreenApp } from "react-navigation";
 import { LoginContainer, MessageContainer, DashboardContainer, AddContactContainer } from './container';
+
 
 const SignedIn = createStackNavigator({
   Home: {
@@ -17,12 +18,6 @@ const SignedOut = createStackNavigator({
   Home: {
     screen: LoginContainer
   },
-  // Dashboard: {
-  //   screen: DashboardContainer
-  // },
-  // Message: {
-  //   screen: MessageContainer
-  // }
 });
 
 export const resetAction = StackActions.reset({

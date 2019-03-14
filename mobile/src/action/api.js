@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import { dispatch } from './../configureStore'
+import { dispatch } from '../store'
 import { AsyncStorage } from 'react-native'
 import { baseURL } from './../env'
 
@@ -19,12 +19,11 @@ export const DECRYPT_MESSAGES = 'DECRYPT_MESSAGES'
 export const STORE_CONVERSATION = 'STORE_CONVERSATION'
 
 async function call(type, method, config, store) {
-  console.log('request made', type)
-  dispatch({ type: type, payload: { phase: LOADING_PHASE } })
+  dispatch({ type: type + '_REQUEST', payload: { phase: LOADING_PHASE } })
   const headers = (config) ? config.headers : {}
   const request = {
     ...config,
-    timeout: 10000,
+    timeout: 2000,
     method,
     baseURL,
     headers: { ...headers, token: await AsyncStorage.getItem('token') }
@@ -34,14 +33,13 @@ async function call(type, method, config, store) {
     payload.phase = SUCCESS_PHASE
     payload.store = store
     dispatch({
-      type,
+      type: type + '_SUCCESS',
       payload
     })
     return payload
   } catch (exception) {
-    console.log('exception', exception)
     dispatch({
-      type,
+      type: type + '_FAILURE',
       payload: { phase: ERROR_PHASE, data: request.data, store }
     })
   }

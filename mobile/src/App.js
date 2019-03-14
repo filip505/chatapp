@@ -3,7 +3,7 @@ import { Text, View, AsyncStorage, Alert } from 'react-native'
 import createRootNavigator from './routes'
 import { Provider } from 'react-redux'
 import Socket from './socket'
-import { persistor, store } from './configureStore'
+import { persistor, store } from './store'
 import { PersistGate } from 'redux-persist/es/integration/react'
 import OneSignal from 'react-native-onesignal'
 import RSAKey from 'react-native-rsa';
@@ -23,7 +23,10 @@ const SplashScreen = () => {
 export default class App extends Component {
   constructor(props) {
     super(props)
-    this.state = { gateLifted: false }
+    this.state = {
+      gateLifted: false,
+      currentScreen: 'Home'
+    }
     OneSignal.init("0596fb61-668e-4d9a-ba3a-3d5a3de4e16a");
     OneSignal.addEventListener('received', this.onReceived);
     OneSignal.addEventListener('opened', this.onOpened);
@@ -64,21 +67,40 @@ export default class App extends Component {
     this.setState({ gateLifted: true })
   }
 
+
+
   renderMainNavigator() {
+    function getActiveRouteName(navigationState) {
+      if (!navigationState) {
+        return null;
+      }
+      const route = navigationState.routes[navigationState.index];
+      if (route.routes) {
+        return getActiveRouteName(route);
+      }
+      return route.routeName;
+    }
+
     const MainNavigator = this.MainNavigator
-    return <MainNavigator />
+    return <MainNavigator onNavigationStateChange={(prevState, currentState) => {
+      const currentScreen = getActiveRouteName(currentState);
+      const prevScreen = getActiveRouteName(prevState);
+
+      if (prevScreen !== currentScreen) {
+        this.setState({ currentScreen })
+      }
+    }} />
   }
 
   render() {
-    const { gateLifted } = this.state
+    const { gateLifted, currentScreen } = this.state
     return (
-      //<View style={{ flex: 1, backgroundColor: '#f0f' }}><Text>odasdasdask</Text></View>
       <Provider store={store}>
         <PersistGate
           onBeforeLift={() => this.onBeforeLift()}
           persistor={persistor}>
           {gateLifted && (
-            <Socket>
+            <Socket currentScreen={currentScreen}>
               {this.renderMainNavigator()}
             </Socket>
           )}

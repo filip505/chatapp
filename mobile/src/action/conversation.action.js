@@ -1,14 +1,12 @@
 import { get, post, GET_CONVERSATIONS, CREATE_CONVERSATION, STORE_CONVERSATION, STORE_USER, STORE_USERS } from './api'
-import { dispatch } from './../configureStore'
+import { dispatch } from '../store'
 
 export const getConversations = async () => {
   const response = await get(GET_CONVERSATIONS, '/conversation')
   const users = {}
-  console.log('response', response)
   for (let conversation of response.data) {
     users[conversation.companion.number] = conversation.companion
   }
-  console.log('response', users)
   dispatch({
     type: STORE_USERS,
     payload: { users }
