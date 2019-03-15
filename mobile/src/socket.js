@@ -10,14 +10,12 @@ class Socket extends Component {
   constructor(props) {
     super(props)
     this.reconnect = true
-    this.state = {
-      appState: AppState.currentState,
-    }
+    this.state = { appState: AppState.currentState }
   }
 
   componentWillMount() {
     this.setPrivateKey()
-    if (this.props.auth.token && !this.connected) {
+    if (this.props.auth && !this.connected) {
       this.connect()
     }
   }
@@ -31,7 +29,7 @@ class Socket extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.auth.token && !this.connected) {
+    if (newProps.auth && !this.connected) {
       this.connect()
     }
   }
@@ -65,27 +63,23 @@ class Socket extends Component {
     this.ws.onclose = () => {
       this.connected = false
       if (this.reconnect) {
-        setTimeout(() => this.connect(), 50000)
+        setTimeout(() => this.connect(), 1)
       }
     }
   }
 
   async onMessage(message) {
-    const { conversations } = this.props
+    const { conversation } = this.props
     const { conversationId } = message
-    console.log('message',conversationId)
     const messages = await decryptMessages([message])
 
     if (this.props.currentScreen == 'Message') {
       storeMessages(messages, conversationId)
     }
 
-
-    if (conversations[conversationId]) {
-      console.log('storeConversation1', conversations[conversationId])
-      storeConversation({...conversations[conversationId], lastMessageId: message.id})
+    if (conversation[conversationId]) {
+      storeConversation({ ...conversation[conversationId], lastMessageId: message.id })
     } else {
-      console.log('storeConversation2', conversations[conversationId])
       getConversations()
     }
   }
@@ -108,6 +102,6 @@ class Socket extends Component {
 }
 
 const mapStateToProps = ({ auth, conversation }) => {
-  return { auth, conversations: conversation.conversations }
+  return { auth, conversation }
 }
 export default connect(mapStateToProps)(Socket)

@@ -5,6 +5,7 @@ import SpinnerHocComponent from '../../component/spinner.hoc';
 import DismissKeyboardHoc from '../../component/dismissKeyboard.hoc'
 import { connect } from 'react-redux'
 import { login } from './../../action/auth.action'
+import { clearError } from './../../action/api'
 import { createLoadingSelector, createErrorMessageSelector } from './../../util/selectors'
 
 class LoginContainer extends Component {
@@ -21,10 +22,14 @@ class LoginContainer extends Component {
     }
   }
 
-  componentWillReceiveProps(props) {
-    // if (isSuccess(props.auth.phase)) {
-    //   props.navigation.navigate('SignedIn')
-    // }
+  componentWillMount() {
+    clearError('LOGIN')
+  }
+
+  componentWillReceiveProps({ auth, navigation }) {
+    if (auth) {
+      navigation.navigate('SignedIn')
+    }
   }
 
   loginHandler = async () => {
@@ -36,36 +41,36 @@ class LoginContainer extends Component {
   }
 
   render() {
-    const { username, password, isFetching, auth, isError } = this.props
+    const { username, password, isFetching, isError } = this.props
     return (
       // <SpinnerHocComponent
       //   spinner={isLoading(auth.phase)}
       //   style={styles.container}
       // >
-        <DismissKeyboardHoc>
-          <View style={styles.container}>
-            <TextInput
-              style={[styles.textInput, { marginTop: 40 }]}
-              placeholder="Username"
-              value={username}
-              autoCapitalize='none'
-              onChangeText={username => { this.setState({ 'username': username }) }}
-            />
-            <TextInput
-              placeholder="Password"
-              style={[styles.textInput, { marginVertical: 20 }]}
-              value={password}
-              autoCapitalize='none'
-              onChangeText={(password) => this.setState({ 'password': password })}
-            />
-            <TouchableOpacity style={[styles.button]}
-              onPress={this.loginHandler}
-            >
-              <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}> {(isFetching) ? 'LOADING' : 'LOGIN'} </Text>
-            </TouchableOpacity>
-            {(isError) && <Text> Error </Text>}
-          </View>
-        </DismissKeyboardHoc>
+      <DismissKeyboardHoc>
+        <View style={styles.container}>
+          <TextInput
+            style={[styles.textInput, { marginTop: 40 }]}
+            placeholder="Username"
+            value={username}
+            autoCapitalize='none'
+            onChangeText={username => { this.setState({ 'username': username }) }}
+          />
+          <TextInput
+            placeholder="Password"
+            style={[styles.textInput, { marginVertical: 20 }]}
+            value={password}
+            autoCapitalize='none'
+            onChangeText={(password) => this.setState({ 'password': password })}
+          />
+          <TouchableOpacity style={[styles.button]}
+            onPress={this.loginHandler}
+          >
+            <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}> {(isFetching) ? 'LOADING' : 'LOGIN'} </Text>
+          </TouchableOpacity>
+          {(isError) && <Text> {isError.data} </Text>}
+        </View>
+      </DismissKeyboardHoc>
       //</SpinnerHocComponent>
     )
   }

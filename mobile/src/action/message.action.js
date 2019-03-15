@@ -28,6 +28,7 @@ export const decryptMessages = async (messages) => {
 }
 
 export const storeMessages = (messages, conversationId) => {
+  console.log('bljak')
   dispatch({
     type: STORE_MESSAGES,
     payload: { messages, conversationId }

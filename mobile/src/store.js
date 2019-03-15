@@ -6,10 +6,10 @@ import { AsyncStorage } from 'react-native'
 import appReducer from './reducer'
 import reduxThunk from 'redux-thunk'
 
-const init = { message: { messages: {}}, user: {}, auth: {}, conversation: {}, loading: {} }
+const init = { message: {}, user: {}, auth: {}, conversation: {}, loading: {} }
 
 const rootReducer = (state, action) => {
-  if (action.type === 'USER_LOGOUT') {
+  if (action.type === 'LOGIN_OUT') {
     AsyncStorage.removeItem('token')
     Object.keys(state).forEach(key => {
       AsyncStorage.removeItem(`persist:${key}`);

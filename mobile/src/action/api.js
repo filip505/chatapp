@@ -18,8 +18,13 @@ export const STORE_USERS = 'STORE_USERS'
 export const DECRYPT_MESSAGES = 'DECRYPT_MESSAGES'
 export const STORE_CONVERSATION = 'STORE_CONVERSATION'
 
+export const SUCCESS = '_SUCCESS'
+export const FAILURE = '_FAILURE'
+export const REQUEST = '_REQUEST'
+export const CLEAR = '_CLEAR'
+
 async function call(type, method, config, store) {
-  dispatch({ type: type + '_REQUEST', payload: { phase: LOADING_PHASE } })
+  dispatch({ type: type + REQUEST, payload: { phase: LOADING_PHASE } })
   const headers = (config) ? config.headers : {}
   const request = {
     ...config,
@@ -30,24 +35,25 @@ async function call(type, method, config, store) {
   }
   try {
     let payload = await Axios.request(request)
-    payload.store = store
     dispatch({
-      type: type + '_SUCCESS',
-      payload
+      type: type + SUCCESS,
+      payload: {...payload, store}
     })
     return payload
   } catch (exception) {
-    console.log('_FAILURE', exception.response)
+    console.log(FAILURE, exception.response)
     dispatch({
-      type: type + '_FAILURE',
+      type: type + FAILURE,
       //payload: { phase: ERROR_PHASE, data: request.data, store }
       payload: exception.response
     })
   }
 }
 
-export function clearErrors(){
-  
+export function clearError(type){
+  dispatch({
+    type: type + '_CLEAR'
+  })
 }
 
 export const get = async (type, url, headers, store) => await call(type, 'get', { url, headers }, store)

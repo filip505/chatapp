@@ -64,13 +64,12 @@ class Dashboard extends Component {
 
   render() {
     const { user, message, conversation } = this.props
-    console.log('conversation', conversation)
     return (
       <View style={{ flex: 1 }}>
 
         <FlatList style={styles.list}
           data={Object.values(conversation).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))}
-          renderItem={({ item }) => this.renderConversation(item, user[item.companionId], message.messages[item.id])}
+          renderItem={({ item }) => this.renderConversation(item, user[item.companionId], message[item.id])}
           keyExtractor={(conversation) => conversation.id}
         />
 
