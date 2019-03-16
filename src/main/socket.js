@@ -28,16 +28,8 @@ class Socket {
           try {
             const msg = JSON.parse(message.utf8Data)
             const token = await this.tokenRepository.findOne({ id: msg.token })
-            switch (msg.type) {
-              case 'CONNECT':
-                this.connections[token.personId] = connection
-                break
-              case 'DISCONNECT':
-              
-                delete this.connections[token.personId]
-              
-                break
-            }
+            request.personId = token.personId
+            this.connections[token.personId] = connection
           } catch (error) {
             console.log('error')
             connection.send(JSON.stringify({ error: 'invalid token' }))
@@ -45,8 +37,9 @@ class Socket {
           }
         }
       });
-      connection.on('close', function (connection, bla, fllff) {
-        console.log('connection closed')
+      connection.on('close', (connection) => {
+        delete this.connections[request.personId]
+        console.log('connection removed', request.personId)
       });
     })
 

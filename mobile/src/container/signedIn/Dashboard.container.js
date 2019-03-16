@@ -1,11 +1,10 @@
-import * as React from 'react'
-import { Component } from 'react'
-import { View, StyleSheet, Text, Button, AppState } from 'react-native'
+import React, { Component } from 'react'
+import { View, StyleSheet, Button, AppState } from 'react-native'
+import { connect } from 'react-redux'
+import { FlatList } from 'react-native-gesture-handler';
 import UserItem from '../../component/user.item'
 import { logout } from '../../action/auth.action'
 import { getConversations } from '../../action/conversation.action'
-import { connect } from 'react-redux'
-import { ForceTouchGestureHandler, FlatList } from 'react-native-gesture-handler';
 import { isLoading, isSuccess } from '../../util/actionPhaseUtil'
 
 class Dashboard extends Component {
@@ -22,12 +21,9 @@ class Dashboard extends Component {
     };
   }
 
-  componentWillMount() {
-    getConversations()
-  }
-
   componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange);
+    getConversations()
   }
 
   componentWillUnmount() {
@@ -75,8 +71,8 @@ class Dashboard extends Component {
   }
 }
 
-const mapStateToProps = ({ conversation, user, message }) => {
-  return { conversation, user, message }
+const mapStateToProps = ({ conversation, user, message, auth }) => {
+  return { conversation, user, message, auth }
 }
 
 const styles = StyleSheet.create({

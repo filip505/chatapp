@@ -1,7 +1,7 @@
 import { get, post, GET_CONVERSATIONS, CREATE_CONVERSATION, STORE_CONVERSATION, STORE_USER, STORE_USERS } from './api'
 import { dispatch } from '../store'
 
-export const getConversations = async () => {
+export const getConversations = async (token) => {
   const response = await get(GET_CONVERSATIONS, '/conversation')
   const users = {}
   for (let conversation of response.data) {

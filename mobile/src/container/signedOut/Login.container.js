@@ -27,7 +27,7 @@ class LoginContainer extends Component {
   }
 
   componentWillReceiveProps({ auth, navigation }) {
-    if (auth) {
+    if (auth.token) {
       navigation.navigate('SignedIn')
     }
   }

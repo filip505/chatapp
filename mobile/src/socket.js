@@ -49,9 +49,7 @@ class Socket extends Component {
 
   async disconnect() {
     console.log('DISCONNECTIONG')
-    const token = await AsyncStorage.getItem('token')
     this.reconnect = false
-    this.send(JSON.stringify({ token, type: 'DISCONNECT' }))
     this.ws.close()
   }
 
