@@ -65,12 +65,15 @@ class Socket extends Component {
     this.ws.onclose = () => {
       this.connected = false
       if (this.reconnect) {
-        setTimeout(() => this.connect(), 1)
+        setTimeout(() => this.connect(), 2000)
       }
     }
   }
 
   async onMessage(message) {
+    if(message.error) {
+      return message
+    }
     const { conversation } = this.props
     const { conversationId } = message
     const messages = await decryptMessages([message])

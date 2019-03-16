@@ -1,12 +1,12 @@
 import { getRepository } from 'typeorm'
 
-class MessageService{
+class MessageService {
   messageRepository = getRepository('message')
   subjectRepository = getRepository('subject')
   personRepository = getRepository('person')
   conversationRepository = getRepository('conversation')
 
-  async createMessage(conversationId, number, text, user){
+  async createMessage(conversationId, number, text, user) {
     const date = new Date()//.format("YYYY-MM-DD HH:mm")
 
     const receiver = await this.personRepository.findOne({ number })
@@ -17,11 +17,11 @@ class MessageService{
 
     let message = { receiverId: receiver.id, text, senderId: user.id }
     message = await this.messageRepository.save({ ...message, conversation, createdAt: date })
-   
+
     conversation.lastMessageId = message.id
     conversation.companionId = user.number
     await this.conversationRepository.save(conversation)
-  
+
     return message;
   }
 
@@ -32,7 +32,7 @@ class MessageService{
         person
       },
     })
-    
+
     if (!subject) throw { status: 404, body: 'invalid conversation id' }
 
     const messages = await this.messageRepository.find({
@@ -41,7 +41,10 @@ class MessageService{
         receiverId: person.id
       }
     })
-    
+
+    if (messages.length > 0)
+      await this.messageRepository.delete(messages)
+
     return messages
   }
 }
