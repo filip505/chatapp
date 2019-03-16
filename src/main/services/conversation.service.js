@@ -40,6 +40,7 @@ class ConversationService {
         ],
       })
     }
+    
     conversation.companionId = companion.id
     conversation.companion = companion
     return conversation
@@ -52,14 +53,14 @@ class ConversationService {
       },
       relations: ['companion', 'conversation']
     })
-    subjects = subjects.map((subject) => {
+    const conversations = subjects.map((subject) => {
       const response = subject.conversation
       response.companion = subject.companion
       response.companionId = subject.companion.id
       return response
-    })
+    }).filter((conversation) => conversation.lastMessageId)
   
-    return subjects
+    return conversations
   }
 }
 

@@ -64,8 +64,7 @@ class Socket extends Component {
     this.ws.onerror = (error) => { }
     this.ws.onclose = () => {
       this.connected = false
-      if (this.reconnect) {
-        console.log('token', token)
+      if (this.reconnect && this.props.auth.token) {
         setTimeout(() => this.connect(), 2000)
       }
     }
