@@ -17,6 +17,11 @@ export default new EntitySchema({
     companionId: {
       type: "uuid",
       primary: true
+    },
+    messageCount: {
+      name: 'messageCount',
+      type: 'integer',
+      default: 0
     }
   },
   relations: {

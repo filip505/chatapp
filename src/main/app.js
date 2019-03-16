@@ -10,7 +10,7 @@ const config = {
   password: "node",
   database: "node",
   synchronize: false,
-  logging: false,
+  logging: true,
   migrations: ["./migration/*.js"],
   cli: {
     "migrationsDir": "migration"

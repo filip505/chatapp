@@ -22,12 +22,6 @@ export default new EntitySchema({
       name: 'updated_at',
       type: 'timestamp'
     },
-    messageCount: {
-      name: 'messageCount',
-      type: 'integer',
-      default: 0
-    }
-
   },
   relations: {
     messages: {

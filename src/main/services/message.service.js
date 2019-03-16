@@ -12,22 +12,34 @@ class MessageService {
     const receiver = await this.personRepository.findOne({ number })
     if (!receiver) throw { status: 404, body: 'invalid receiver number' }
 
-    let conversation = await this.conversationRepository.findOne({ id: conversationId })
-    if (!conversation) throw { status: 404, body: 'invalid conversation id' }
+    // let conversation = await this.conversationRepository.findOne({ id: conversationId })
+    // if (!conversation) throw { status: 404, body: 'invalid conversation id' }
+
+    const subject = await this.subjectRepository.findOne({
+      where: {
+        personId: receiver.id,
+        conversationId
+      },
+      relations: ['companion', 'conversation']
+    })
+
+    const { conversation } = subject
+    if (!subject) throw { status: 404, body: 'invalid conversation id' }
 
     let message = { receiverId: receiver.id, text, senderId: user.id }
     message = await this.messageRepository.save({ ...message, conversation, createdAt: date })
 
     conversation.lastMessageId = message.id
     conversation.companionId = user.number
-    conversation.messageCount += 1
+
     await this.conversationRepository.save(conversation)
+    await this.subjectRepository.save({ ...subject, messageCount: subject.messageCount + 1 })
 
     return message;
   }
 
   async getMessages(conversationId, person) {
-    const subject = await this.subjectRepository.find({
+    const subject = await this.subjectRepository.findOne({
       where: {
         conversationId,
         person
@@ -45,9 +57,8 @@ class MessageService {
 
     if (messages.length > 0) {
       await this.messageRepository.delete(messages)
-      await this.conversationRepository.save({id: conversationId, messageCount: 0})
+      await this.subjectRepository.save({ ...subject, messageCount: 0 })
     }
-
     return messages
   }
 }

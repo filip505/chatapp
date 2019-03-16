@@ -53,10 +53,12 @@ class ConversationService {
       },
       relations: ['companion', 'conversation']
     })
+    
     const conversations = subjects.map((subject) => {
       const response = subject.conversation
       response.companion = subject.companion
       response.companionId = subject.companion.id
+      response.messageCount = subject.messageCount
       return response
     }).filter((conversation) => conversation.lastMessageId)
   
