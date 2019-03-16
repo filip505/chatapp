@@ -20,7 +20,7 @@ export default async (port) => {
   // }
   
   let app = express()
-
+  app.disable('etag');
   app.use(cors())
   app.use(bodyParser.json())
   app.use(authMiddleware)

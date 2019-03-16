@@ -13,4 +13,6 @@ export default (state = {}, action) => {
     //      and false when receiving GET_TODOS_SUCCESS / GET_TODOS_FAILURE
     [requestName]: requestState === 'REQUEST',
   };
+
+  return state
 };

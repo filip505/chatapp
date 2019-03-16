@@ -10,8 +10,8 @@ export default function (state = null, action) {
       });
       return { ...conversations }
     case GET_MESSAGES + SUCCESS: {
+      if(action.payload.data == 0) return state
       const { conversationId } = action.payload.data[0]
-      if(!conversationId) return state
       return { ...state, [conversationId]: { ...state[conversationId], messageCount: 0 } }
     }
     // case GET_CONVERSATIONS:

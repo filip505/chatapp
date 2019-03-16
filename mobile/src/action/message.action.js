@@ -8,10 +8,17 @@ export const sendMessage = async (encrypted, text, number, conversationId) => {
 }
 
 export const getMessages = async (conversationId) => {
+  console.log('ide')
+  try {
   const res = await get(GET_MESSAGES, `/message/conversation/${conversationId}`)
-  const messages = await decryptMessages(res.data)
-
-  storeMessages(messages, conversationId)
+  }catch(exception){
+    console.log('ide')
+  }
+//   if(res.data) {
+// console.log('data', data)
+//   }
+  // const messages = await decryptMessages(res.data)
+  // storeMessages(messages, conversationId)
 }
 
 export const decryptMessages = async (messages) => {

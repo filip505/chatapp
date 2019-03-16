@@ -68,7 +68,8 @@ class Dashboard extends Component {
       <View style={{ flex: 1 }}>
         <UserHeader user={user} onPress={() => this.props.navigation.goBack()} />
         <FlatList style={styles.list}
-          data={messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))}
+          inverted
+          data={messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))}
           renderItem={({ item }) => this.renderMessage(item)}
           keyExtractor={(item) => item.id}
         />
@@ -98,7 +99,7 @@ const mapStateToProps = function (state, ownProps) {
   const conversationId = getParam('conversationId')
 
   const messages = Object.values(message[conversationId] ? message[conversationId] : {}).sort((msg) => msg.createdAt)
- 
+
   return { messages, user: user[userId], conversationId, userId }
 }
 

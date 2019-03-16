@@ -37,20 +37,19 @@ async function call(type, method, config, store) {
     let payload = await Axios.request(request)
     dispatch({
       type: type + SUCCESS,
-      payload: {...payload, store}
+      payload: { ...payload, store }
     })
     return payload
   } catch (exception) {
-    console.log(FAILURE, exception.response)
+    console.log(FAILURE, (exception.response) ? exception.response : exception)
     dispatch({
       type: type + FAILURE,
-      //payload: { phase: ERROR_PHASE, data: request.data, store }
       payload: exception.response
     })
   }
 }
 
-export function clearError(type){
+export function clearError(type) {
   dispatch({
     type: type + '_CLEAR'
   })
