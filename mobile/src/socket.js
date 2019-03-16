@@ -15,14 +15,14 @@ class Socket extends Component {
 
   componentWillMount() {
     this.setPrivateKey()
-    if (this.props.auth && !this.connected) {
+    if (this.props.auth.token && !this.connected) {
       this.connect()
     }
     console.log('componentWillMount')
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.auth && !this.connected) {
+    if (newProps.auth.token && !this.connected) {
       this.connect()
     }
   }
@@ -65,13 +65,14 @@ class Socket extends Component {
     this.ws.onclose = () => {
       this.connected = false
       if (this.reconnect) {
+        console.log('token', token)
         setTimeout(() => this.connect(), 2000)
       }
     }
   }
 
   async onMessage(message) {
-    if(message.error) {
+    if (message.error) {
       return message
     }
     const { conversation } = this.props
@@ -82,8 +83,14 @@ class Socket extends Component {
       storeMessages(messages, conversationId)
     }
 
+   
     if (conversation[conversationId]) {
-      storeConversation({ ...conversation[conversationId], lastMessageId: message.id })
+      const conv = conversation[conversationId]
+      storeConversation({
+        ...conv,
+        lastMessageId: message.id,
+        messageCount: conv.messageCount + 1
+      })
     } else {
       getConversations()
     }

@@ -1,4 +1,4 @@
-import { GET_CONVERSATIONS, SUCCESS, STORE_CONVERSATION, SUCCESS_PHASE, CREATE_CONVERSATION } from '../action/api'
+import { GET_CONVERSATIONS, SUCCESS, STORE_CONVERSATION, GET_MESSAGES } from '../action/api'
 
 export default function (state = null, action) {
   switch (action.type) {
@@ -9,6 +9,11 @@ export default function (state = null, action) {
         conversations[conversation.id] = conversation
       });
       return { ...conversations }
+    case GET_MESSAGES + SUCCESS: {
+      const { conversationId } = action.payload.data[0]
+      if(!conversationId) return state
+      return { ...state, [conversationId]: { ...state[conversationId], messageCount: 0 } }
+    }
     // case GET_CONVERSATIONS:
     //   switch (action.payload.phase) {
     //     case SUCCESS_PHASE:

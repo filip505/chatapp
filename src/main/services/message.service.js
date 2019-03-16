@@ -20,6 +20,7 @@ class MessageService {
 
     conversation.lastMessageId = message.id
     conversation.companionId = user.number
+    conversation.messageCount += 1
     await this.conversationRepository.save(conversation)
 
     return message;
@@ -42,8 +43,10 @@ class MessageService {
       }
     })
 
-    if (messages.length > 0)
+    if (messages.length > 0) {
       await this.messageRepository.delete(messages)
+      await this.conversationRepository.save({id: conversationId, messageCount: 0})
+    }
 
     return messages
   }

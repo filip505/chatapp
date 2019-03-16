@@ -20,6 +20,7 @@ export default function ({ conversation, style, onPress, user, message }) {
         </Text>
         <Text style={styles.text}>
           {message.text}
+          {conversation.messageCount}
         </Text>
       </View>
     </TouchableOpacity>
