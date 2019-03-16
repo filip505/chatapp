@@ -33,13 +33,13 @@ class Socket {
                 this.connections[token.personId] = connection
                 break
               case 'DISCONNECT':
-                console.log('prije', this.connections[token.personId])
+              
                 delete this.connections[token.personId]
-                console.log('poslije', this.connections[token.personId])
+              
                 break
             }
           } catch (error) {
-            console.log('error', connection)
+            console.log('error')
             connection.send(JSON.stringify({ error: 'invalid token' }))
             connection.close()
           }
@@ -53,7 +53,6 @@ class Socket {
   }
 
   sendMessage = (msg) => new Promise((resolve, reject) => {
-    console.log('this.connections[msg.receiverId]', this.connections[msg.receiverId])
     this.connections[msg.receiverId].send(JSON.stringify(msg))
   });
 

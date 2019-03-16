@@ -6,9 +6,7 @@ import { sendMessage, getMessages } from '../../action/message.action'
 import BubbleChatItem from '../../component/bubble.chat.item';
 import BubbleComponent from '../../component/bubble.component';
 import RSAKey from 'react-native-rsa'
-import { getUser } from '../../action/user.action'
 import UserHeader from '../../component/user.header.item'
-import { resetAction } from '../../routes'
 
 class Dashboard extends Component {
 
@@ -23,7 +21,7 @@ class Dashboard extends Component {
   }
 
   componentWillMount() {
-    getUser(this.props.userId)
+    getMessages(this.props.conversationId)
   }
 
   componentDidMount() {
@@ -39,7 +37,7 @@ class Dashboard extends Component {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      getUser(this.props.userId)
+      getMessages(this.props.conversationId)
     }
     this.setState({ appState: nextAppState });
   };

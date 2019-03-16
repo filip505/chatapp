@@ -9,7 +9,7 @@ export const sendMessage = async (encrypted, text, number, conversationId) => {
 
 export const getMessages = async (conversationId) => {
   const res = await get(GET_MESSAGES, `/message/conversation/${conversationId}`)
-  const messages = await encryptMessages(res.data)
+  const messages = await decryptMessages(res.data)
 
   storeMessages(messages, conversationId)
 }
@@ -28,7 +28,6 @@ export const decryptMessages = async (messages) => {
 }
 
 export const storeMessages = (messages, conversationId) => {
-  console.log('bljak')
   dispatch({
     type: STORE_MESSAGES,
     payload: { messages, conversationId }

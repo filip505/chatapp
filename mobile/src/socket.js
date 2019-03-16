@@ -18,14 +18,7 @@ class Socket extends Component {
     if (this.props.auth && !this.connected) {
       this.connect()
     }
-  }
-
-  componentDidMount() {
-    AppState.addEventListener('change', () => this._handleAppStateChange);
-  }
-
-  componentWillUnmount() {
-    AppState.removeEventListener('change', () => this._handleAppStateChange);
+    console.log('componentWillMount')
   }
 
   componentWillReceiveProps(newProps) {
@@ -34,17 +27,28 @@ class Socket extends Component {
     }
   }
 
-  _handleAppStateChange(nextAppState) {
-    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-      this.connect()
-    }
-    else {
-      this.disconnect()
+  componentDidMount() {
+    AppState.addEventListener('change', this._handleAppStateChange);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = (nextAppState) => {
+    switch (nextAppState) {
+      case 'active':
+        this.connect()
+        break
+      case 'background':
+        this.disconnect()
+        break
     }
     this.setState({ appState: nextAppState });
   };
 
   async disconnect() {
+    console.log('DISCONNECTIONG')
     const token = await AsyncStorage.getItem('token')
     this.reconnect = false
     this.send(JSON.stringify({ token, type: 'DISCONNECT' }))
@@ -52,10 +56,10 @@ class Socket extends Component {
   }
 
   async connect() {
+    console.log('CONNECTIONG')
     this.connected = true
     this.reconnect = true
     const token = await AsyncStorage.getItem('token')
-    console.log('CONNECTIONG')
     this.ws = new WebSocket(baseSocketURL)
     this.ws.onopen = () => { this.send(JSON.stringify({ token, type: 'CONNECT' })) }
     this.ws.onmessage = (event) => this.onMessage(JSON.parse(event.data))

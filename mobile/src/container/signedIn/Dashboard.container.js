@@ -17,7 +17,7 @@ class Dashboard extends Component {
 
   constructor(props) {
     super(props)
-    state = {
+    this.state = {
       appState: AppState.currentState,
     };
   }
@@ -27,22 +27,19 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    AppState.addEventListener('change', () => this._handleAppStateChange);
+    AppState.addEventListener('change', this._handleAppStateChange);
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', () => this._handleAppStateChange);
+    AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  _handleAppStateChange(nextAppState) {
-    if (
-      this.state.appState.match(/inactive|background/) &&
-      nextAppState === 'active'
-    ) {
+  _handleAppStateChange = (nextAppState) => {
+    if (nextAppState === 'active') {
       getConversations()
     }
     this.setState({ appState: nextAppState });
-  };
+  }
 
   renderConversation(conversation, user, messages) {
     let message = { text: 'New Message' }
