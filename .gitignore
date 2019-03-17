@@ -1,1 +1,5 @@
-node_modules
+server/node_modules
+server/main/coverage
+mobile/node_modules
+.idea
+.vscode
