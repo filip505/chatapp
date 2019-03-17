@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: postgres:9.6.5
+        environment:
+          POSTGRES_USER: node
+          POSTGRES_DB: node
+          POSTGRES_PASSWORD: node
+
+    steps:
+      - checkout
+
+      - run: docker build -t mynode -f ./server/Dockerfile.dev .
+
+      - run: docker run test
+
+
