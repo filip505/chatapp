@@ -1,29 +1,46 @@
 version: 2
 jobs:
-  build:
-    docker:
-      - image: postgres:9.6.5
-        environment:
-          POSTGRES_USER: node
-          POSTGRES_DB: node
-          POSTGRES_PASSWORD: node
+ build:
+   machine: true
+   steps:
+     - checkout
+     # start proprietary DB using private Docker image
+    #  # with credentials stored in the UI
+    #  - run: |
+    #      docker login -u $DOCKER_USER -p $DOCKER_PASS
+    #      docker run -d --name db company/proprietary-db:1.2.3
 
-    steps:
-      - checkout
+     # build the application image
+     - run: docker build -t mynode -f ./server/Dockerfile.dev .
 
-      - run: apt-get update && apt-get -y install curl
+     - run: docker run test
 
-      - run:
-          name: Install Docker client
-          command: |
-            set -x
-            VER="17.03.0-ce"
-            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
+# version: 2
+# jobs:
+#   build:
+#     docker:
+#       - image: postgres:9.6.5
+#         environment:
+#           POSTGRES_USER: node
+#           POSTGRES_DB: node
+#           POSTGRES_PASSWORD: node
 
-      - run: docker build -t mynode -f ./server/Dockerfile.dev .
+#     steps:
+#       - checkout
 
-      - run: docker run test
+#       - run: apt-get update && apt-get -y install curl
+
+#       - run:
+#           name: Install Docker client
+#           command: |
+#             set -x
+#             VER="17.03.0-ce"
+#             curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+#             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+#             mv /tmp/docker/* /usr/bin
+
+#       - run: docker build -t mynode -f ./server/Dockerfile.dev .
+
+#       - run: docker run test
 
 
