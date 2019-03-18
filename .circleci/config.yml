@@ -7,6 +7,7 @@ jobs:
           POSTGRES_USER: node
           POSTGRES_PASSWORD: node
           POSTGRES_DB: node
+    machine: true
     steps:
       - checkout
       # start proprietary DB using private Docker image
