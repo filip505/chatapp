@@ -1,12 +1,7 @@
 version: 2
 jobs:
  build:
-   docker:
-     - image: postgres:9.6.10
-      environment:
-        POSTGRES_USER: node
-        POSTGRES_PASSWORD: node
-        POSTGRES_DB: node
+   machine: true
    steps:
      - checkout
      # start proprietary DB using private Docker image
@@ -18,7 +13,7 @@ jobs:
      # build the application image
      - run: cd server && npm install
 
-     - run: npm
+     - run: cd server && npm run production
 
 # version: 2
 # jobs:
