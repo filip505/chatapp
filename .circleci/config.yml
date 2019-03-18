@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/classic
+      - image: circleci/node:10.8.0
       - image: postgres:9.6.10
         environment:
           POSTGRES_USER: node
