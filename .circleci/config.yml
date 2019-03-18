@@ -20,7 +20,7 @@ jobs:
       # build the application image
       - run: cd server && npm install
 
-      - run: cd server && npm run production
+      - run: cd server && npm run test
 # version: 2
 # jobs:
 #   build:
