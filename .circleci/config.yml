@@ -1,21 +1,27 @@
 version: 2
 jobs:
- build:
-   machine: true
-   working_directory: ~/server
-   steps:
-     - checkout
-     # start proprietary DB using private Docker image
-    #  # with credentials stored in the UI
-    #  - run: |
-    #      docker login -u $DOCKER_USER -p $DOCKER_PASS
-    #      docker run -d --name db company/proprietary-db:1.2.3
+  server_build:
+    docker:
+      - image: postgres:9.6.10
+        environment:
+          POSTGRES_USER: node
+          POSTGRES_PASSWORD: node
+          POSTGRES_DB: node
 
-     # build the application image
-     - run: npm install
+    working_directory: ~/server
+    steps:
+      - checkout
+      # start proprietary DB using private Docker image
+      #  # with credentials stored in the UI
+      #  - run: |
+      #      docker login -u $DOCKER_USER -p $DOCKER_PASS
+      #      docker run -d --name db company/proprietary-db:1.2.3
 
-     - run: npm run production
+      # build the application image
+      - run: ls
+      - run: npm install
 
+      - run: npm run production
 # version: 2
 # jobs:
 #   build:
@@ -43,5 +49,4 @@ jobs:
 #       - run: docker build -t mynode -f ./server/Dockerfile.dev .
 
 #       - run: docker run test
-
 
