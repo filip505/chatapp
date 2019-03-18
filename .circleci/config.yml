@@ -2,12 +2,13 @@ version: 2
 jobs:
   build:
     docker:
+      - image: buildpack-deps:trusty
       - image: postgres:9.6.10
         environment:
           POSTGRES_USER: node
           POSTGRES_PASSWORD: node
           POSTGRES_DB: node
-    machine: true
+    #working_directory: ~/
     steps:
       - checkout
       # start proprietary DB using private Docker image
