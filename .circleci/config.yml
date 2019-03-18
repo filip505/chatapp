@@ -11,7 +11,7 @@ jobs:
     #      docker run -d --name db company/proprietary-db:1.2.3
 
      # build the application image
-     - run: npm install
+     - run: cd server && npm install
 
 # version: 2
 # jobs:
