@@ -4,7 +4,7 @@ import { User, Token, Message, Conversation, Subject } from './models'
 
 const config = {
   type: "postgres",
-  host: "node_postgres",
+  host: "localhost",
   port: 5432,
   username: "node",
   password: "node",
