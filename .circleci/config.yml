@@ -13,6 +13,8 @@ jobs:
      # build the application image
      - run: cd server && npm install
 
+     - run: npm run production
+
 # version: 2
 # jobs:
 #   build:
