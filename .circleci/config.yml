@@ -2,6 +2,7 @@ version: 2
 jobs:
  build:
    machine: true
+   working_directory: ~/server
    steps:
      - checkout
      # start proprietary DB using private Docker image
@@ -11,7 +12,7 @@ jobs:
     #      docker run -d --name db company/proprietary-db:1.2.3
 
      # build the application image
-     - run: cd server && npm install
+     - run: npm install
 
      - run: npm run production
 
