@@ -27,6 +27,7 @@ jobs:
 
      # deploy the image
      - run: docker push filip505/mynode:$CIRCLE_BRANCH
+     
 
 workflows:
   version: 2
