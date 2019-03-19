@@ -40,22 +40,28 @@ function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            //await connection.runMigrations()
-            // await getConnection().synchronize(true);
-            // fixtures.init()
-            // if (process.env.NODE_ENV === 'test') {
+            _context.next = 2;
+            return (0, _typeorm.getConnection)().synchronize(true);
+
+          case 2:
+            _fixtures.default.init(); // if (process.env.NODE_ENV === 'test') {
             // }
+
+
             app = (0, _express.default)();
             app.disable('etag');
             app.use((0, _cors.default)());
             app.use(_bodyParser.default.json());
             app.use(_middleware.authMiddleware);
             app.use(_routes.default);
+            app.get('ping', function (req, res) {
+              res.send('pong');
+            });
             app = _http.default.createServer(app);
-            _context.next = 9;
+            _context.next = 13;
             return app.listen(port);
 
-          case 9:
+          case 13:
             server = _context.sent;
 
             server.closeAll = function () {
@@ -70,7 +76,7 @@ function () {
             console.log('server env ' + process.env.NODE_ENV);
             return _context.abrupt("return", server);
 
-          case 15:
+          case 19:
           case "end":
             return _context.stop();
         }

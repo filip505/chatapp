@@ -31,4 +31,4 @@ var _default = {
   }
 };
 exports.default = _default;
-//# sourceMappingURL=SignInSchema.js.map
+//# sourceMappingURL=signInSchema.js.map

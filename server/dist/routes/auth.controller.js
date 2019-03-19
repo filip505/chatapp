@@ -88,9 +88,6 @@ function () {
     return _ref2.apply(this, arguments);
   };
 }()));
-router.get('/ping', function (req, res, next) {
-  res.send('pong');
-});
 var _default = router;
 exports.default = _default;
 //# sourceMappingURL=auth.controller.js.map
