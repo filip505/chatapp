@@ -7,7 +7,7 @@ const config = {
   host: "localhost",
   port: 5432,
   username: "node",
-  password: "node",
+  password: "testing2019",
   database: "node",
   synchronize: false,
   logging: true,
