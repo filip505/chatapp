@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/node:10.8.0
       - image: postgres:9.6.10
@@ -15,16 +15,36 @@ jobs:
       - run: cd server && npm install
 
       - run: cd server && npm run test
+  build:
+    machine: true
+    steps:
+     - checkout
+     # start proprietary DB using private Docker image
+     # with credentials stored in the UI
+     - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+     
+     - run: docker build -t filip505/mynode:$CIRCLE_BRANCH ./server
 
-      - run:
-          name: Install Docker client
-          command: |
-            set -x
-            VER="17.03.0-ce"
-            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
+     # deploy the image
+     - run: docker push filip505/mynode:$CIRCLE_BRANCH
 
-      - run: |
-          TAG=0.1.$CIRCLE_BUILD_NUM
-          docker build -t mynode/server:$TAG . 
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - test
+      - build
+
+      # - run:
+      #     name: Install Docker client
+      #     command: |
+      #       set -x
+      #       VER="17.03.0-ce"
+      #       curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+      #       tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+      #       mv /tmp/docker/* /usr/bin
+
+      # - run: |
+      #     TAG=0.1.$CIRCLE_BUILD_NUM
+      #     docker build -t filip505/mynode:$TAG . 
+      #     docker push mynode/server:$TAG
