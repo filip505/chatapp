@@ -23,12 +23,14 @@ jobs:
      # with credentials stored in the UI
      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
      
-     - run: docker build -t filip505/mynode:$CIRCLE_BRANCH ./server
+     - run: docker build -t filip505/mynode:latest ./server
 
      # deploy the image
-     - run: docker push filip505/mynode:$CIRCLE_BRANCH
+     - run: docker push filip505/mynode:latest
 
-     - run: eb init -p docker mynode
+     - run: |
+        brew update
+        brew install awsebcli
 
 workflows:
   version: 2
