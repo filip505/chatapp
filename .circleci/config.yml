@@ -27,7 +27,8 @@ jobs:
 
      # deploy the image
      - run: docker push filip505/mynode:$CIRCLE_BRANCH
-     
+
+     - run: eb init -p docker mynode
 
 workflows:
   version: 2
