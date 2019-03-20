@@ -2,12 +2,16 @@
 
 require("@babel/polyfill");
 
+var _env = _interopRequireDefault(require("./env"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var express = require('express');
 
 var app = express();
 var port = 5001;
 app.get('/ping', function (req, res) {
-  return res.send('pong');
+  return res.send(JSON.stringify(_env.default));
 });
 app.listen(port, function () {
   return console.log("Example app listening on port ".concat(port, "!"));

@@ -1,9 +1,10 @@
 import '@babel/polyfill'
+import env from './env'
 const express = require('express')
 const app = express()
 const port = 5001
 
-app.get('/ping', (req, res) => res.send(process.env.DB_USER))
+app.get('/ping', (req, res) => res.send(JSON.stringify(env)))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 // import { createConnection, } from 'typeorm'

@@ -7,7 +7,8 @@
     "clean": "rm -rf dist",
     "start": "NODE_ENV=dev DB_USER=tet nodemon ./bin/dev",
     "build": "npm run clean && mkdir dist && babel src/main -s -d dist",
-    "production": "npm run build && NODE_ENV=production node bin/pro",
+    "env": "sed 's/$DB_HOST/'$DB_HOST'/g;s/$DB_USER/'$DB_USER'/g;s/$DB_PASSWORD/'$DB_PASSWORD'/g' env.txt > ./src/main/env.js",
+    "production": "npm run env && npm run build && NODE_ENV=production node bin/pro",
     "test": "jest --runInBand --coverage"
   },
   "author": "",
