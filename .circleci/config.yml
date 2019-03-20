@@ -19,21 +19,11 @@ jobs:
     machine: true
     steps:
      - checkout
-     # start proprietary DB using private Docker image
-     # with credentials stored in the UI
-     - run:
-       name: Setup Environment Variables
-       command: |
-        export DB_USER=$DB_USER
-        export DB_HOST=$DB_HOST
-        export DB_PASS=$DB_PASS
-
-     - run:
-       name: Setup Environment Variables
-       command: |
-        echo $DB_USER
-        echo $DB_HOST
-        echo $DB_PASS
+  
+     - run: export DB_USER=$DB_USER
+     - run: export DB_HOST=$DB_HOST
+     - run: export DB_PASS=$DB_PASS
+     - run: echo $DB_USER
 
      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
      
