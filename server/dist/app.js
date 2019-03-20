@@ -2,16 +2,15 @@
 
 require("@babel/polyfill");
 
-var _cors = _interopRequireDefault(require("cors"));
+var express = require('express');
 
-var _express = _interopRequireDefault(require("express"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var app = (0, _express.default)();
-app.use((0, _cors.default)());
-app.get('ping', function (req, res) {
-  res.send('pong');
+var app = express();
+var port = 5001;
+app.get('/ping', function (req, res) {
+  return res.send('pong');
+});
+app.listen(port, function () {
+  return console.log("Example app listening on port ".concat(port, "!"));
 }); // import { createConnection, } from 'typeorm'
 // import { User, Token, Message, Conversation, Subject } from './models'
 // //eb deploy Mynode-env
