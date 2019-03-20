@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/main/services/index.js"],"names":[],"mappings":";;;;;;;;;;;;AAAA","sourcesContent":["import authService from './auth.service'\n\nexport {\n  authService\n}"],"file":"index.js"}
