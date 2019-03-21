@@ -2,9 +2,9 @@ FROM node:alpine
 
 WORKDIR '/app'
 
-ARG DB_USER
-ARG DB_PASS
-ARG DB_HOST
+ARG DB_USER='default'
+ARG DB_PASS='default'
+ARG DB_HOST='default'
 
 ENV DB_USER=$DB_USER
 ENV DB_PASS=$DB_PASS

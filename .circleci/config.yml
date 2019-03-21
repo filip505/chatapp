@@ -22,6 +22,8 @@ jobs:
 
      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
+     - run: echo $DB_USER
+
      - run: docker build --build-arg DB_USER=$DB_USER  --build-arg DB_PASS=$DB_PASS --build-arg DB_HOST=$DB_HOST -t filip505/mynode:latest ./server
 
      - run: docker build -t filip505/mynode:latest ./server
