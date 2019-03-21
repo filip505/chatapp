@@ -22,16 +22,25 @@ jobs:
 
      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
-     - run: echo $DB_USER
-
      - run: docker build --build-arg DB_USER=$DB_USER  --build-arg DB_PASS=$DB_PASS --build-arg DB_HOST=$DB_HOST -t filip505/mynode:latest ./server
 
-     # deploy the image
      - run: docker push filip505/mynode:latest
 
-     - run: |
-        brew update
-        brew install awsebcli
+     - run:
+        name: Install pip
+        command: |
+          sudo apt update
+          sudo apt install -y python-pip python-dev
+
+     - run:
+        name: Install AWS dependencies
+        command: |
+         sudo pip install awsebcli
+
+      #eb deploy Mynode-env
+      
+      #eb init -p docker mynode
+     - run: eb deploy Mynode-env
 
 workflows:
   version: 2
@@ -39,17 +48,3 @@ workflows:
     jobs:
       - test
       - build
-
-      # - run:
-      #     name: Install Docker client
-      #     command: |
-      #       set -x
-      #       VER="17.03.0-ce"
-      #       curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-      #       tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-      #       mv /tmp/docker/* /usr/bin
-
-      # - run: |
-      #     TAG=0.1.$CIRCLE_BUILD_NUM
-      #     docker build -t filip505/mynode:$TAG . 
-      #     docker push mynode/server:$TAG

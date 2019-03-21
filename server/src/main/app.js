@@ -9,8 +9,7 @@ import '@babel/polyfill'
 import '@babel/polyfill'
 import { createConnection, } from 'typeorm'
 import { User, Token, Message, Conversation, Subject } from './models'
-//eb deploy Mynode-env
-//eb init -p docker mynode
+
 const config = {
   type: "postgres",
   host: (process.env.DB_HOST) ? process.env.DB_HOST : 'localhost',
