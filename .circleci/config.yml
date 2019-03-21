@@ -19,14 +19,11 @@ jobs:
     machine: true
     steps:
      - checkout
-  
-     - run: export DB_USER=$DB_USER
-     - run: export DB_HOST=$DB_HOST
-     - run: export DB_PASS=$DB_PASS
-     - run: echo $DB_USER
 
      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-     
+
+     - run: docker build --build-arg DB_USER=$DB_USER DB_PASS=$DB_PASS DB_HOST=$DB_HOST -t filip505/mynode:latest ./server
+
      - run: docker build -t filip505/mynode:latest ./server
 
      # deploy the image
