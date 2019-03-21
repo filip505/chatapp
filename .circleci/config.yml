@@ -31,6 +31,7 @@ jobs:
         command: |
           sudo apt update
           sudo apt install -y python-pip python-dev
+          sudo pip install --upgrade setuptools
 
      - run:
         name: Install AWS dependencies
@@ -38,7 +39,7 @@ jobs:
          sudo pip install awsebcli
 
       #eb deploy Mynode-env
-      
+    
       #eb init -p docker mynode
      - run: eb deploy Mynode-env
 
