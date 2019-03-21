@@ -12,8 +12,8 @@ export default async (port) => {
 
   //await connection.runMigrations()
 
-  await getConnection().synchronize(true);
-  fixtures.init()
+  // await getConnection().synchronize(true);
+  // fixtures.init()
   // if (process.env.NODE_ENV === 'test') {
 
 
@@ -25,7 +25,7 @@ export default async (port) => {
   app.use(bodyParser.json())
   app.use(authMiddleware)
   app.use(routers)
-  app.get('ping', (req, res)=>{
+  app.get('/ping', (req, res)=>{
     res.send('pong')
   })
   app = http.createServer(app)
