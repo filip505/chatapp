@@ -38,9 +38,8 @@ jobs:
         command: |
          sudo pip install awsebcli
 
-      #eb deploy Mynode-env
-    
-      #eb init -p docker mynode
+     - run: eb init -p docker mynode
+      
      - run: eb deploy Mynode-env
 
 workflows:
