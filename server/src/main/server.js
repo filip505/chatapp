@@ -36,7 +36,7 @@ export default async (port) => {
     console.log('close all')
     connection.close()
     server.close()
-    socket.close()
+    //socket.close()
   }
 
   console.log('___________________________')

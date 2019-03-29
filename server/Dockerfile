@@ -17,5 +17,6 @@ RUN npm install
 COPY . .
 
 EXPOSE 1337
+EXPOSE 5001
 
 CMD npm run production
