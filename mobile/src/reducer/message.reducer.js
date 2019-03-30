@@ -4,6 +4,7 @@ export default function (state = null, action) {
   switch (action.type) {
     case STORE_MESSAGES: {
       const { messages, conversationId } = action.payload
+      console.log('action.payload', action.payload)
       return { ...state, [conversationId]: {...state[conversationId], ...messages}}
     }
     case SEND_MESSAGE + SUCCESS: {

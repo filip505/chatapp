@@ -12,12 +12,12 @@ export default async (port) => {
 
   //await connection.runMigrations()
 
-  // await getConnection().synchronize(true);
-  // fixtures.init()
-  // if (process.env.NODE_ENV === 'test') {
+  await getConnection().synchronize(true);
+  fixtures.init()
+  if (process.env.NODE_ENV === 'test') {
 
 
-  // }
+  }
   
   let app = express()
   app.disable('etag');

@@ -32,10 +32,6 @@ const config = {
   ]
 }
 
-console.log(process.env.DB_HOST)
-console.log(process.env.DB_USER)
-console.log(process.env.DB_PASS)
-
 let connection
 
 createConnection(config).then(async function (newConnection) {
